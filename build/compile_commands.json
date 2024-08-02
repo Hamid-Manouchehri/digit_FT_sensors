@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/data/users/hmanouch/projects/CMAKE_FT_TEST/build",
+  "command": "/bin/c++   -I/data/users/hmanouch/projects/CMAKE_FT_TEST/include -I/data/users/hmanouch/projects/CMAKE_FT_TEST/robotous_ft   -pthread -g   -o CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.o -c /data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/test.cpp",
+  "file": "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/test.cpp"
+},
+{
+  "directory": "/data/users/hmanouch/projects/CMAKE_FT_TEST/build",
+  "command": "/bin/c++   -I/data/users/hmanouch/projects/CMAKE_FT_TEST/include -I/data/users/hmanouch/projects/CMAKE_FT_TEST/robotous_ft   -pthread -g   -o CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o -c /data/users/hmanouch/projects/CMAKE_FT_TEST/src/RFT_IF_PACKET_REV.cpp",
+  "file": "/data/users/hmanouch/projects/CMAKE_FT_TEST/src/RFT_IF_PACKET_REV.cpp"
+},
+{
+  "directory": "/data/users/hmanouch/projects/CMAKE_FT_TEST/build",
+  "command": "/bin/c++   -I/data/users/hmanouch/projects/CMAKE_FT_TEST/include -I/data/users/hmanouch/projects/CMAKE_FT_TEST/robotous_ft   -pthread -g   -o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o -c /data/users/hmanouch/projects/CMAKE_FT_TEST/src/RFT_UART_SAMPLE.cpp",
+  "file": "/data/users/hmanouch/projects/CMAKE_FT_TEST/src/RFT_UART_SAMPLE.cpp"
+}
+]
