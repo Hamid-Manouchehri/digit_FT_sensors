@@ -4,6 +4,11 @@
 #include <iostream>
 #include <fstream>
 
+#include <string>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+
 // Toon headers
 // #include <TooN/TooN.h>
 // #include <TooN/LU.h>
@@ -15,6 +20,7 @@
 #include <unistd.h>
 #include "robotous_ft/RFT_UART_SAMPLE.h"
 
+
 //////////////////////////////////////////////////////////////////////////////
 // Global Functions
 // using namespace::TooN;
@@ -23,17 +29,39 @@
 int img_index = 0;
 
 /////////////////////////// USER DEFINED FUNCTIONS //////////////////////////
+// Function to get the current time as a string in ISO 8601 format
+std::string getCurrentTimeISO8601() {
+    auto now = std::chrono::system_clock::now();
+    auto now_time_t = std::chrono::system_clock::to_time_t(now);
+    auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+
+    std::tm now_tm;
+#if defined(_WIN32) || defined(_WIN64)
+    localtime_s(&now_tm, &now_time_t);  // For Windows
+#else
+    localtime_r(&now_time_t, &now_tm);  // For POSIX
+#endif
+
+    std::ostringstream oss;
+    oss << std::put_time(&now_tm, "%Y-%m-%dT%H:%M:%S") << '.' << std::setfill('0') << std::setw(3) << now_ms.count();
+    return oss.str();
+}
+
+
 void SAVE_FT_TO_CSV_FILE(float FT_data[], int img_index){
 
 	std::string directory = "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/csv_data/";
 	std::string fileExtension = ".csv";
     std::string baseFileName = "test_ft_data_file";  // TODO, and the correspponding in RFT_UART_SAMPLE.cpp
 	std::string fullPath = directory + baseFileName + fileExtension;
+	std::string time_stamp;
 
 	std::ofstream datafile;
     datafile.open(fullPath, std::ios::app);
 
-    datafile << img_index << "," << FT_data[0] << "," << FT_data[1] << "," << FT_data[2] << ","
+	time_stamp = getCurrentTimeISO8601();
+
+    datafile << img_index << "," << time_stamp << "," << FT_data[0] << "," << FT_data[1] << "," << FT_data[2] << ","
                 << FT_data[3] << "," << FT_data[4] << "," << FT_data[5] << "\n";
 
 

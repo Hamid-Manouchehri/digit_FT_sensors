@@ -39,6 +39,14 @@ iostream
 -
 fstream
 -
+string
+-
+chrono
+-
+iomanip
+-
+sstream
+-
 memory.h
 -
 unistd.h

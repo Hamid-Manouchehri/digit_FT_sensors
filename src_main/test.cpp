@@ -53,7 +53,7 @@ int main()
 
 	std::ofstream datafile;
     datafile.open(fullPath);
-    datafile << "index, Fx, Fy, Fz, Tx, Ty, Tz\n";
+    datafile << "index, time_stamp, Fx, Fy, Fz, Tx, Ty, Tz\n";
     datafile.close();
     
 	char devName[] = "/dev/ttyUSB";
