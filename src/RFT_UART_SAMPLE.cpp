@@ -26,57 +26,6 @@
 // using namespace::TooN;
 // Vector<6,float> FT;
 
-int img_index = 0;
-
-/////////////////////////// USER DEFINED FUNCTIONS //////////////////////////
-// Function to get the current time as a string in ISO 8601 format
-std::string getCurrentTimeISO8601() {
-    auto now = std::chrono::system_clock::now();
-    auto now_time_t = std::chrono::system_clock::to_time_t(now);
-    auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-
-    std::tm now_tm;
-#if defined(_WIN32) || defined(_WIN64)
-    localtime_s(&now_tm, &now_time_t);  // For Windows
-#else
-    localtime_r(&now_time_t, &now_tm);  // For POSIX
-#endif
-
-    std::ostringstream oss;
-    oss << std::put_time(&now_tm, "%Y-%m-%dT%H:%M:%S") << '.' << std::setfill('0') << std::setw(3) << now_ms.count();
-    return oss.str();
-}
-
-
-void SAVE_FT_TO_CSV_FILE(float FT_data[], int img_index){
-
-	std::string directory = "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/csv_data/";
-	std::string fileExtension = ".csv";
-    std::string baseFileName = "test_ft_data_file";  // TODO, and the correspponding in RFT_UART_SAMPLE.cpp
-	std::string fullPath = directory + baseFileName + fileExtension;
-	std::string time_stamp;
-
-	std::ofstream datafile;
-    datafile.open(fullPath, std::ios::app);
-
-	time_stamp = getCurrentTimeISO8601();
-
-    datafile << img_index << "," << time_stamp << "," << FT_data[0] << "," << FT_data[1] << "," << FT_data[2] << ","
-                << FT_data[3] << "," << FT_data[4] << "," << FT_data[5] << "\n";
-
-
-	datafile.close();
-
-	directory = "/data/users/hmanouch/projects/DIGIT/digit_tactile_sensor/";  // dir to python script, take correponding image.
-    baseFileName = "take_digit_image.py";
-    fullPath = directory + baseFileName;
-    fullPath = "python3 " + fullPath + " img_" + std::to_string(img_index);  // TODO, name of image files.
-
-    int result = std::system(fullPath.c_str());
-
-}
-//////////////////////////////////////////////////////////////////////////////
-
 
 void *readThread( void *pSerial )
 {
@@ -339,13 +288,13 @@ void CRT_RFT_UART::RFT_Data_Handler( void )
 		// 	FT[i] = m_RFT_IF_PACKET.m_rcvdForce[i];
 		// }
 		
+		// int data_rate;
+		// data_rate = 1;  // TODO, ms
+		// set_FT_Cont_Interval(data_rate);
 
-		printf("%0.3f, %.03f, %.03f, %0.3f, %.03f, %.03f\r",
-			m_RFT_IF_PACKET.m_rcvdForce[0], m_RFT_IF_PACKET.m_rcvdForce[1], m_RFT_IF_PACKET.m_rcvdForce[2],
-			m_RFT_IF_PACKET.m_rcvdForce[3], m_RFT_IF_PACKET.m_rcvdForce[4], m_RFT_IF_PACKET.m_rcvdForce[5] );
-		
-		SAVE_FT_TO_CSV_FILE(m_RFT_IF_PACKET.m_rcvdForce, img_index);
-		img_index += 1;
+		// printf("%0.3f, %.03f, %.03f, %0.3f, %.03f, %.03f\r",
+		// 	m_RFT_IF_PACKET.m_rcvdForce[0], m_RFT_IF_PACKET.m_rcvdForce[1], m_RFT_IF_PACKET.m_rcvdForce[2],
+		// 	m_RFT_IF_PACKET.m_rcvdForce[3], m_RFT_IF_PACKET.m_rcvdForce[4], m_RFT_IF_PACKET.m_rcvdForce[5] );
 
 		break;
 
