@@ -45,19 +45,17 @@
 
 // using namespace std;
 
-std::string dir_to_FT_csv = "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/csv_data/";
+// std::string dir_to_FT_csv = "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/csv_data/";  // UR5e PC
+std::string dir_to_FT_csv = "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src_main/csv_data/";  // My PC
 std::string FT_csv_file_name = "test_ft_data_file.csv";  // TODO, and the correspponding in RFT_UART_SAMPLE.cpp
 std::string full_path_to_FT_csv_file = dir_to_FT_csv + FT_csv_file_name;
 
-std::string dir_to_python_script = "/data/users/hmanouch/projects/DIGIT/digit_tactile_sensor/";
-std::string python_file_name = "take_digit_image.py";
-std::string full_path_to_python_script = dir_to_python_script + python_file_name;
 
 const char* devName = "/dev/ttyUSB"; // Change to const char*
-BYTE port = 1;  // TODO
+BYTE port = 0;  // TODO
 DWORD baudRate = B115200;
 DWORD byteSize = CS8;
-int dataRateInterval = 1000; // Example: 100 ms for 10 Hz
+int dataRateInterval = 100; // Example: 100 ms for 10 Hz
 
 
 void initializeCSVFile(void){
@@ -85,13 +83,6 @@ std::string getCurrentTimeISO8601() {
     std::ostringstream oss;
     oss << std::put_time(&now_tm, "%Y-%m-%dT%H:%M:%S") << '.' << std::setfill('0') << std::setw(3) << now_ms.count();
     return oss.str();
-}
-
-
-void execute_DIGIT_python_script(void){
-
-    std::string exec_command = "python3 " + full_path_to_python_script + " " + getCurrentTimeISO8601();  // TODO, name of image files.
-    int result = std::system(exec_command.c_str());
 }
 
 
@@ -134,10 +125,15 @@ bool setDataRate(CRT_RFT_UART& sensor, int dataRateInterval) {
 
 // Function to read and print FT data continuously at the specified frequency
 void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
+    
+    sensor.set_FT_Bias(1);
     sensor.rqst_FT_Continuous();
 	int img_index = 0;
 
     while (true) {
+
+        // sensor.rqst_FT_Continuous(); // UNCOMMENT ONLY ONCE WHEN YOU REPLUG THE SENSOR, PORT NUMBER CHANGES
+
         // Assuming the readWorker method continuously reads data into m_RFT_IF_PACKET.m_rcvdForce
         float* FT_data = sensor.m_RFT_IF_PACKET.m_rcvdForce;
 
@@ -160,7 +156,6 @@ void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
 }
 
 int main() {
-
 
     CRT_RFT_UART RFT_SENSOR;
 

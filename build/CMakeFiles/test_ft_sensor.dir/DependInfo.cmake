@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/test.cpp" "/data/users/hmanouch/projects/CMAKE_FT_TEST/build/CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.o"
+  "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src_main/test.cpp" "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/build/CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -16,7 +16,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/data/users/hmanouch/projects/CMAKE_FT_TEST/build/CMakeFiles/robo_ft.dir/DependInfo.cmake"
+  "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

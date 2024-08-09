@@ -15,7 +15,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/addr2line"
+			"value" : "/usr/bin/addr2line"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -31,7 +31,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/ar"
+			"value" : "/usr/bin/ar"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/build"
+			"value" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -159,7 +159,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/c++"
+			"value" : "/usr/bin/c++"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -175,7 +175,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/gcc-ar-9"
+			"value" : "/usr/bin/gcc-ar-9"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_RANLIB",
@@ -191,7 +191,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/gcc-ranlib-9"
+			"value" : "/usr/bin/gcc-ranlib-9"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -287,7 +287,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/cc"
+			"value" : "/usr/bin/cc"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -303,7 +303,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/gcc-ar-9"
+			"value" : "/usr/bin/gcc-ar-9"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_RANLIB",
@@ -319,7 +319,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/gcc-ranlib-9"
+			"value" : "/usr/bin/gcc-ranlib-9"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -416,6 +416,18 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "CMAKE_DLLTOOL-NOTFOUND"
+		},
+		{
+			"name" : "CMAKE_EDIT_COMMAND",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to cache edit program executable."
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/bin/ccmake"
 		},
 		{
 			"name" : "CMAKE_EXECUTABLE_FORMAT",
@@ -595,7 +607,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/data/users/hmanouch/projects/CMAKE_FT_TEST"
+			"value" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -635,7 +647,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/ld"
+			"value" : "/usr/bin/ld"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -651,7 +663,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/make"
+			"value" : "/usr/bin/make"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -747,7 +759,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/nm"
+			"value" : "/usr/bin/nm"
 		},
 		{
 			"name" : "CMAKE_NUMBER_OF_MAKEFILES",
@@ -775,7 +787,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/objcopy"
+			"value" : "/usr/bin/objcopy"
 		},
 		{
 			"name" : "CMAKE_OBJDUMP",
@@ -791,7 +803,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/objdump"
+			"value" : "/usr/bin/objdump"
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",
@@ -855,7 +867,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/ranlib"
+			"value" : "/usr/bin/ranlib"
 		},
 		{
 			"name" : "CMAKE_READELF",
@@ -871,7 +883,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/readelf"
+			"value" : "/usr/bin/readelf"
 		},
 		{
 			"name" : "CMAKE_ROOT",
@@ -1091,7 +1103,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/bin/strip"
+			"value" : "/usr/bin/strip"
 		},
 		{
 			"name" : "CMAKE_UNAME",
@@ -1103,7 +1115,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/bin/uname"
+			"value" : "/usr/bin/uname"
 		},
 		{
 			"name" : "CMAKE_VERBOSE_MAKEFILE",
@@ -1131,7 +1143,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/build"
+			"value" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/build"
 		},
 		{
 			"name" : "Powerball_SOURCE_DIR",
@@ -1143,7 +1155,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/data/users/hmanouch/projects/CMAKE_FT_TEST"
+			"value" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors"
 		}
 	],
 	"kind" : "cache",

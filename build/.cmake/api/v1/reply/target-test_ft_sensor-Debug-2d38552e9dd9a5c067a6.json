@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/bin/test_ft_sensor"
+			"path" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/bin/test_ft_sensor"
 		}
 	],
 	"backtrace" : 1,
@@ -62,11 +62,11 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/include"
+					"path" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/robotous_ft"
+					"path" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/robotous_ft"
 				}
 			],
 			"language" : "CXX",

@@ -135,8 +135,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/build",
-		"source" : "/data/users/hmanouch/projects/CMAKE_FT_TEST"
+		"build" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/build",
+		"source" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors"
 	},
 	"version" : 
 	{

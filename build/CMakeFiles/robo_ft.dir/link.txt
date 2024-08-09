@@ -1,2 +1,2 @@
-/bin/ar qc ../lib/librobo_ft.a  CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o
-/bin/ranlib ../lib/librobo_ft.a
+/usr/bin/ar qc ../lib/librobo_ft.a  CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o
+/usr/bin/ranlib ../lib/librobo_ft.a

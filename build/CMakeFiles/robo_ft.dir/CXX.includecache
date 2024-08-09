@@ -30,7 +30,17 @@ robotous_ft/RFT_IF_PACKET_REV.h
 sys/time.h
 -
 
-/data/users/hmanouch/projects/CMAKE_FT_TEST/src/RFT_UART_SAMPLE.cpp
+/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp
+robotous_ft/RFT_IF_PACKET_REV.h
+/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src/robotous_ft/RFT_IF_PACKET_REV.h
+stdio.h
+-
+iostream
+-
+string.h
+-
+
+/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp
 stdlib.h
 -
 stdio.h
@@ -52,5 +62,5 @@ memory.h
 unistd.h
 -
 robotous_ft/RFT_UART_SAMPLE.h
-/data/users/hmanouch/projects/CMAKE_FT_TEST/src/robotous_ft/RFT_UART_SAMPLE.h
+/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src/robotous_ft/RFT_UART_SAMPLE.h
 

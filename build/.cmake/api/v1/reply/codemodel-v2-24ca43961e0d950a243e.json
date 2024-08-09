@@ -40,14 +40,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "robo_ft::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-robo_ft-Debug-0bf8ec1604e84afc910e.json",
+					"jsonFile" : "target-robo_ft-Debug-590524feb282434d6551.json",
 					"name" : "robo_ft",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "test_ft_sensor::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-test_ft_sensor-Debug-837975ed6fef4080d773.json",
+					"jsonFile" : "target-test_ft_sensor-Debug-2d38552e9dd9a5c067a6.json",
 					"name" : "test_ft_sensor",
 					"projectIndex" : 0
 				}
@@ -57,8 +57,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/data/users/hmanouch/projects/CMAKE_FT_TEST/build",
-		"source" : "/data/users/hmanouch/projects/CMAKE_FT_TEST"
+		"build" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/build",
+		"source" : "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors"
 	},
 	"version" : 
 	{
