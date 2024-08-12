@@ -46,7 +46,7 @@
 // using namespace std;
 
 // std::string dir_to_FT_csv = "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/csv_data/";  // UR5e PC
-std::string dir_to_FT_csv = "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/src_main/csv_data/";  // My PC
+std::string dir_to_FT_csv = "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/FT_csv_data/";  // My PC
 std::string FT_csv_file_name = "test_ft_data_file.csv";  // TODO, and the correspponding in RFT_UART_SAMPLE.cpp
 std::string full_path_to_FT_csv_file = dir_to_FT_csv + FT_csv_file_name;
 
@@ -62,7 +62,7 @@ void initializeCSVFile(void){
 
 	std::ofstream datafile;
     datafile.open(full_path_to_FT_csv_file);
-    datafile << "index, time_stamp, Fx, Fy, Fz, Tx, Ty, Tz\n";
+    datafile << "index,time_stamp,Fx,Fy,Fz,Tx,Ty,Tz\n";
     datafile.close();
 
 }
@@ -140,8 +140,6 @@ void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
 		SAVE_FT_TO_CSV_FILE(FT_data, img_index);
 		img_index += 1;
 
-		// execute_DIGIT_python_script();
-
         // Print the FT data
         std::cout << "Force-Torque Data: ";
         for (int i = 0; i < 6; ++i) {
@@ -150,7 +148,7 @@ void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
         }
         std::cout << std::endl;
 
-        // Sleep for the interval duration to match the data rate
+
         std::this_thread::sleep_for(std::chrono::milliseconds(dataRateInterval));
     }
 }
