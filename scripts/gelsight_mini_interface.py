@@ -33,9 +33,18 @@
 #!/usr/bin/env python3
 
 import cv2
+from os import getcwd
+from os.path import join, abspath 
 from gelsight import gsdevice
 
-dir_to_save_img = "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/img_data/"  # MY PC
+
+img_name = 'img1.png'  # TODO
+
+current_dir = getcwd()
+parent_dir = join(current_dir, '..')  # Go one level up from the current_dir
+parent_dir_abs = abspath(parent_dir)
+dir_to_save_img = join(parent_dir_abs, 'data/img_data')
+
 
 def show_image(sensor):
 
@@ -45,7 +54,7 @@ def show_image(sensor):
         f1 = sensor.get_image()
         # if USE_ROI:
         #     f1 = f1[int(roi[1]):int(roi[1] + roi[3]), int(roi[0]):int(roi[0] + roi[2])]
-        bigframe = cv2.resize(f1, (f1.shape[1]*2, f1.shape[0]*2))
+        bigframe = cv2.resize(f1, (f1.shape[0]*2, f1.shape[1]*2))
         cv2.imshow('Image', bigframe)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -56,11 +65,12 @@ def main():
     sensor = gsdevice.Camera("GelSight Mini")
 
     sensor.connect()
-    show_image(sensor)
+    # show_image(sensor)
 
     sensor.get_image()
-    sensor.save_image(dir_to_save_img)
+    sensor.save_image(dir_to_save_img + '/' + img_name)
 
+    
 
 if __name__ == '__main__':
     main()

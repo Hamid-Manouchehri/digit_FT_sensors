@@ -3,8 +3,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from os import getcwd
+from os.path import join, abspath
 import matplotlib.dates as mdates
 from datetime import datetime
+
+
+current_dir = getcwd()
 
 
 def extract_seconds_from_timestamp(timestamp):
@@ -67,7 +72,12 @@ def plotter(csv_file, data_array, main_title):
 
 def plot_FT():
 
-    file_path_actual_joint_states = '/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/FT_csv_data/test_ft_data_file.csv'  # MY PC
+    csv_file_name = 'test_ft_data_file.csv'  # TODO
+
+    parent_dir = join(current_dir, '..')  # # Go one level up from the current_dir
+    parent_dir_abs = abspath(parent_dir)
+    dir_to_save_img = join(parent_dir_abs, 'data/FT_csv_data')
+    file_path_actual_joint_states = dir_to_save_img + '/' + csv_file_name
 
     df = pd.read_csv(file_path_actual_joint_states)
 

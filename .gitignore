@@ -1,2 +1,3 @@
 src_main/test_cpp/
-FT_csv_data/
+data/
+build/

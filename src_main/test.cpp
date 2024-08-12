@@ -41,27 +41,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fstream>
+#include <unistd.h>
+#include <limits.h> // For PATH_MAX
 #include "robotous_ft/RFT_UART_SAMPLE.h"
 
 // using namespace std;
 
-// std::string dir_to_FT_csv = "/data/users/hmanouch/projects/CMAKE_FT_TEST/src_main/csv_data/";  // UR5e PC
-std::string dir_to_FT_csv = "/home/hamid/UB/HILS_Lab/projects/digit_FT_sensors/FT_csv_data/";  // My PC
-std::string FT_csv_file_name = "test_ft_data_file.csv";  // TODO, and the correspponding in RFT_UART_SAMPLE.cpp
-std::string full_path_to_FT_csv_file = dir_to_FT_csv + FT_csv_file_name;
+std::string FT_csv_file_name = "test_ft_data_file.csv";  // TODO
 
 
 const char* devName = "/dev/ttyUSB"; // Change to const char*
 BYTE port = 0;  // TODO
 DWORD baudRate = B115200;
 DWORD byteSize = CS8;
-int dataRateInterval = 100; // Example: 100 ms for 10 Hz
+int dataRateInterval = 10; // Example: 100 ms for 10 Hz
 
 
-void initializeCSVFile(void){
+void initializeCSVFile(std::string csv_file){
 
 	std::ofstream datafile;
-    datafile.open(full_path_to_FT_csv_file);
+    datafile.open(csv_file);
     datafile << "index,time_stamp,Fx,Fy,Fz,Tx,Ty,Tz\n";
     datafile.close();
 
@@ -86,12 +85,12 @@ std::string getCurrentTimeISO8601() {
 }
 
 
-void SAVE_FT_TO_CSV_FILE(float FT_data[], int img_index){
+void SAVE_FT_TO_CSV_FILE(std::string csv_file, float FT_data[], int img_index){
 
 	std::string time_stamp;
 	std::ofstream datafile;
 
-    datafile.open(full_path_to_FT_csv_file, std::ios::app);
+    datafile.open(csv_file, std::ios::app);
 
 	time_stamp = getCurrentTimeISO8601();
 
@@ -124,7 +123,7 @@ bool setDataRate(CRT_RFT_UART& sensor, int dataRateInterval) {
 }
 
 // Function to read and print FT data continuously at the specified frequency
-void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
+void readAndPrintFTData(std::string csv_file, CRT_RFT_UART& sensor, int dataRateInterval) {
     
     sensor.set_FT_Bias(1);
     sensor.rqst_FT_Continuous();
@@ -137,7 +136,7 @@ void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
         // Assuming the readWorker method continuously reads data into m_RFT_IF_PACKET.m_rcvdForce
         float* FT_data = sensor.m_RFT_IF_PACKET.m_rcvdForce;
 
-		SAVE_FT_TO_CSV_FILE(FT_data, img_index);
+		SAVE_FT_TO_CSV_FILE(csv_file, FT_data, img_index);
 		img_index += 1;
 
         // Print the FT data
@@ -155,9 +154,28 @@ void readAndPrintFTData(CRT_RFT_UART& sensor, int dataRateInterval) {
 
 int main() {
 
+    char cwd[PATH_MAX];  // current directory
+    std::string full_path_to_FT_csv_file;
+
+    // Get the current working directory
+    if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+
+        // Convert the C-style string to a C++ string for easier manipulation
+        std::string current_dir(cwd);
+
+        // Find the last slash in the path and remove everything after it
+        std::size_t pos = current_dir.find_last_of('/');
+        if (pos != std::string::npos) {
+            current_dir = current_dir.substr(0, pos);
+        }
+
+        full_path_to_FT_csv_file = current_dir + "/data/FT_csv_data/" + FT_csv_file_name;
+    
+    } 
+
     CRT_RFT_UART RFT_SENSOR;
 
-	initializeCSVFile();
+	initializeCSVFile(full_path_to_FT_csv_file);
 
     // Initialize and open the sensor port
     std::cout << "Initializing sensor..." << std::endl;
@@ -179,7 +197,7 @@ int main() {
 
     // Read and print FT data continuously
     std::cout << "Starting to read FT data..." << std::endl;
-    readAndPrintFTData(RFT_SENSOR, dataRateInterval);
+    readAndPrintFTData(full_path_to_FT_csv_file, RFT_SENSOR, dataRateInterval);
 
 
     // Close the sensor port (unreachable code in this example)
