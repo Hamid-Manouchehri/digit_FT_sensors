@@ -33,7 +33,7 @@
 #!/usr/bin/env python3
 
 import cv2
-from os import getcwd
+from os import getcwd, makedirs
 from os.path import join, abspath 
 import h5py
 import numpy as np
@@ -46,22 +46,22 @@ class GelsightMiniClass:
     sensor = gsdevice.Camera("GelSight Mini")
     sensor.connect()
 
-    current_dir = getcwd()
-    parent_dir = join(current_dir, '..')  # Go one level up from the current_dir
+    gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
+    parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
     parent_dir_abs = abspath(parent_dir)
     dir_to_save_img = join(parent_dir_abs, 'data/img_data/')
 
-    def __init__(self, instance_attribute):
+    def __init__(self, hdf5_file_name):
         # Instance attribute (unique to each instance of the class)
-        self.instance_attribute = instance_attribute
+        self.hdf5_file_name = hdf5_file_name
 
 
     # Instance method (can access instance attributes)
-    def save_png_image(cls, image_name='test_img.png'):
+    def save_png_image(cls, dir, image_name='test_img.png'):
 
         cls.sensor.get_image()
-        cls.sensor.save_image(cls.dir_to_save_img + image_name)
-
+        cls.sensor.save_image(dir + image_name)
+        
     
     def show_image(cls):
 
@@ -75,25 +75,35 @@ class GelsightMiniClass:
                 break
 
 
-
-    def save_img_in_hdf5(cls, hdf5_file_name='test.h5'):
+    def save_img_in_hdf5(self):
+        ''' INPUT: is an instance attribute to defining name of hdf5 file to save images. '''
 
         imgs=[]
 
-        for i in range(5):
-            img = cls.sensor.get_image()
+        # start = time.time()
+        for i in range(25):
+            img = self.sensor.get_image()
             imgs.append(img)
+        # end = time.time()
+
+        # print("elapsed time: ", end - start)
 
         imgs = np.array(imgs)
 
-        with h5py.File(cls.dir_to_save_img + hdf5_file_name, 'w') as f:
+        with h5py.File(self.dir_to_save_img + self.hdf5_file_name, 'w') as f:
             f.create_dataset('images', data=imgs, compression='gzip', compression_opts=5)
-        
 
 
-    def save_hdf5_as_png(cls, hdf5_file_name='test.h5'):
+    def save_hdf5_as_png(self):
+        ''' 
+        For post processing.
+        INPUT: is an instance attribute to defining name of hdf5 file to save images.
+        '''
 
-        with h5py.File(cls.dir_to_save_img + hdf5_file_name, 'r') as f:
+        save_images_dir = join(self.dir_to_save_img, self.hdf5_file_name.replace(".h5", ""))
+        makedirs(save_images_dir, exist_ok=True)  # create the directory for .png images if does not exist.
+
+        with h5py.File(self.dir_to_save_img + self.hdf5_file_name, 'r') as f:
                 img_array = f['images'][:] 
 
         # print(np.shape(img_array))
@@ -109,14 +119,15 @@ class GelsightMiniClass:
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
 
-            cls.save_png_image('hdf5_image_' + str(i) + '.png')
+            image_name = '/hdf5_image_' + str(i) + '.png'
+            self.save_png_image(save_images_dir, image_name)
 
 
 
 if __name__ == '__main__':
 
-    gelsight_mini_obj = GelsightMiniClass('hello')
+    gelsight_mini_obj = GelsightMiniClass('test.h5')
 
-    # gelsight_mini_obj.save_img_in_hdf5()
+    gelsight_mini_obj.save_img_in_hdf5()
 
-    gelsight_mini_obj.save_hdf5_as_png()
+    # gelsight_mini_obj.save_hdf5_as_png()
