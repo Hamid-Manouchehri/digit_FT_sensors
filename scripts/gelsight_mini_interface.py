@@ -33,11 +33,14 @@
 #!/usr/bin/env python3
 
 import cv2
+import sys
 from os import getcwd, makedirs
 from os.path import join, abspath 
 import h5py
 import numpy as np
 import time
+import select
+from pynput import keyboard
 from gelsight import gsdevice 
 
 
@@ -75,18 +78,31 @@ class GelsightMiniClass:
                 break
 
 
+    
+    def on_press(self, key):
+        try:
+            if key.char == 'q':
+                return False  # This will stop the listener
+        except AttributeError:
+            pass  # Handle special keys (like ctrl, alt, etc.)
+
+
+
     def save_img_in_hdf5(self):
         ''' INPUT: is an instance attribute to defining name of hdf5 file to save images. '''
 
+        print("Start recording images from gelsight-mini (press q to stop)...")
+
         imgs=[]
 
-        # start = time.time()
-        for i in range(25):
+        listener = keyboard.Listener(on_press=self.on_press)
+        listener.start()
+
+        while listener.running:
             img = self.sensor.get_image()
             imgs.append(img)
-        # end = time.time()
 
-        # print("elapsed time: ", end - start)
+        print("\nrecording images stopped...")
 
         imgs = np.array(imgs)
 
@@ -100,25 +116,18 @@ class GelsightMiniClass:
         INPUT: is an instance attribute to defining name of hdf5 file to save images.
         '''
 
+        print("Post processing; saving hdf5 image data into '.png'...")
+
         save_images_dir = join(self.dir_to_save_img, self.hdf5_file_name.replace(".h5", ""))
         makedirs(save_images_dir, exist_ok=True)  # create the directory for .png images if does not exist.
 
         with h5py.File(self.dir_to_save_img + self.hdf5_file_name, 'r') as f:
                 img_array = f['images'][:] 
 
-        # print(np.shape(img_array))
-        # print(img_array)
 
         for i, image_data in enumerate(img_array):
             # Convert the image data to uint8 if necessary
             image_data = np.array(image_data, dtype=np.uint8)
-
-            ## showing each image separately:
-            # cv2.imshow(f'Image {i+1}', image_data)
-            # print(f"Press any key to continue to the next image ({i+1}/{img_array.shape[0]})...")
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
-
             image_name = '/hdf5_image_' + str(i) + '.png'
             self.save_png_image(save_images_dir, image_name)
 
@@ -126,8 +135,12 @@ class GelsightMiniClass:
 
 if __name__ == '__main__':
 
-    gelsight_mini_obj = GelsightMiniClass('test.h5')
+    gelsight_mini_obj = GelsightMiniClass('test_6.h5')
 
-    gelsight_mini_obj.save_img_in_hdf5()
+    gelsight_mini_obj.show_image()
+
+    # gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img)
+
+    # gelsight_mini_obj.save_img_in_hdf5()
 
     # gelsight_mini_obj.save_hdf5_as_png()
