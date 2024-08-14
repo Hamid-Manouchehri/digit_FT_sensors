@@ -131,14 +131,81 @@ class GelsightMiniClass:
 
 
 
+
+
+def do_cv_stuff(img1):
+
+    img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+
+    img3 = cv2.adaptiveThreshold(img2 ,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
+            cv2.THRESH_BINARY_INV,21,4)
+    
+    img3=cv2.medianBlur(img3, 9)
+    img3=cv2.dilate(img3, (3,3), iterations=2)
+    img3=cv2.medianBlur(img3, 3)
+    img3=cv2.dilate(img3, (3,3), iterations=2)
+
+    # ret, img3 = cv2.threshold(img2, 100, 255, cv2.THRESH_BINARY_INV) 
+
+    # his,bin = np.histogram(img2,bins=np.linspace(0,255,256))
+      
+    # for j in range(len(his)):
+    #     if his[j]>800:
+    #         img2[img2==bin[j]]=0
+    #     else:
+    #         img2[img2==bin[j]]=255
+    # img3=img2
+
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(img3 , 8 , cv2.CV_32S)
+
+    imgC = cv2.cvtColor(img3,cv2.COLOR_GRAY2BGR)
+
+    # print(stats[:,4])
+    for i in range(len(stats)):
+        stat = stats[i]
+        x,y,w,h,area = stat
+        if area < 100:
+            imgC[y:y+h,x:x+w]=0
+
+    for i in range(len(stats)):
+        stat = stats[i]
+        x,y,w,h,area = stat
+
+        if area != np.max(stats[:,4]): # background pixel intensity is the largest area in stats
+            if area > 55:
+                cv2.rectangle(imgC,[x,y],[x+w,y+h], (255,0,0), 2)    # img, bbox starting corner, bbox ending corner, color, line thickness
+                x,y = centroids[i].astype(int)
+                
+                cv2.circle(imgC,(x,y),2,(0,0,255),2)
+
+
+    # converting back to color so the bboxs are still in red
+    img2 = cv2.cvtColor(img2,cv2.COLOR_GRAY2BGR)
+    img3 = cv2.cvtColor(img3,cv2.COLOR_GRAY2BGR)
+    imgH = np.hstack((img1,img2,img3,imgC))
+
+
+    cv2.imshow('wakka',imgH)
+    if cv2.waitKey(1) & 0xFF==ord('q'):
+        print('quitting program')
+        exit()
+    
+
+
+
+
 if __name__ == '__main__':
 
     gelsight_mini_obj = GelsightMiniClass('test.h5')
 
     # gelsight_mini_obj.show_image()
 
-    gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img, 'test_img.png')
+    while True:
+        f1 = gelsight_mini_obj.sensor.get_image()
+        do_cv_stuff(f1)
 
-    gelsight_mini_obj.save_img_in_hdf5()
+    # gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img, 'test_img.png')
 
-    gelsight_mini_obj.save_hdf5_as_png()
+    # gelsight_mini_obj.save_img_in_hdf5()
+
+    # gelsight_mini_obj.save_hdf5_as_png()
