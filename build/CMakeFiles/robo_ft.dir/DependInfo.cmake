@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/data/users/hmanouch/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp" "/data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o"
-  "/data/users/hmanouch/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp" "/data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o"
+  "/home/hamid/UB/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp" "/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o"
+  "/home/hamid/UB/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp" "/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

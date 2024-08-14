@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/users/hmanouch/projects/digit_FT_sensors
+CMAKE_SOURCE_DIR = /home/hamid/UB/projects/digit_FT_sensors
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/users/hmanouch/projects/digit_FT_sensors/build
+CMAKE_BINARY_DIR = /home/hamid/UB/projects/digit_FT_sensors/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/robo_ft.dir/depend.make
@@ -59,29 +59,29 @@ include CMakeFiles/robo_ft.dir/flags.make
 
 CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o: CMakeFiles/robo_ft.dir/flags.make
 CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o: ../src/RFT_IF_PACKET_REV.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o"
-	/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o -c /data/users/hmanouch/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.o -c /home/hamid/UB/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp
 
 CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.i"
-	/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /data/users/hmanouch/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp > CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hamid/UB/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp > CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.i
 
 CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.s"
-	/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /data/users/hmanouch/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp -o CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hamid/UB/projects/digit_FT_sensors/src/RFT_IF_PACKET_REV.cpp -o CMakeFiles/robo_ft.dir/src/RFT_IF_PACKET_REV.cpp.s
 
 CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o: CMakeFiles/robo_ft.dir/flags.make
 CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o: ../src/RFT_UART_SAMPLE.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o"
-	/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o -c /data/users/hmanouch/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o -c /home/hamid/UB/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp
 
 CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.i"
-	/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /data/users/hmanouch/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp > CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hamid/UB/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp > CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.i
 
 CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.s"
-	/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /data/users/hmanouch/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp -o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hamid/UB/projects/digit_FT_sensors/src/RFT_UART_SAMPLE.cpp -o CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.s
 
 # Object files for target robo_ft
 robo_ft_OBJECTS = \
@@ -95,7 +95,7 @@ robo_ft_EXTERNAL_OBJECTS =
 ../lib/librobo_ft.a: CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.o
 ../lib/librobo_ft.a: CMakeFiles/robo_ft.dir/build.make
 ../lib/librobo_ft.a: CMakeFiles/robo_ft.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library ../lib/librobo_ft.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library ../lib/librobo_ft.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/robo_ft.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/robo_ft.dir/link.txt --verbose=$(VERBOSE)
 
@@ -109,6 +109,6 @@ CMakeFiles/robo_ft.dir/clean:
 .PHONY : CMakeFiles/robo_ft.dir/clean
 
 CMakeFiles/robo_ft.dir/depend:
-	cd /data/users/hmanouch/projects/digit_FT_sensors/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /data/users/hmanouch/projects/digit_FT_sensors /data/users/hmanouch/projects/digit_FT_sensors /data/users/hmanouch/projects/digit_FT_sensors/build /data/users/hmanouch/projects/digit_FT_sensors/build /data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/hamid/UB/projects/digit_FT_sensors/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/hamid/UB/projects/digit_FT_sensors /home/hamid/UB/projects/digit_FT_sensors /home/hamid/UB/projects/digit_FT_sensors/build /home/hamid/UB/projects/digit_FT_sensors/build /home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/robo_ft.dir/depend
 

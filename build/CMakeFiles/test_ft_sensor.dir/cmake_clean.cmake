@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "../bin/test_ft_sensor"
   "../bin/test_ft_sensor.pdb"
-  "CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.o"
+  "CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

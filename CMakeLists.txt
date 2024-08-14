@@ -28,5 +28,5 @@ add_library(robo_ft ${ROBOTOUS_LIB_SRC})
 
 
 # compile executables
-add_executable(test_ft_sensor src_main/test.cpp)
+add_executable(test_ft_sensor src_main/FT_sensor.cpp)
 target_link_libraries(test_ft_sensor pthread robo_ft)

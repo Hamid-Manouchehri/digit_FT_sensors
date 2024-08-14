@@ -59,9 +59,8 @@ class GelsightMiniClass:
         self.hdf5_file_name = hdf5_file_name
 
 
-    # Instance method (can access instance attributes)
-    def save_png_image(cls, dir, image_name='test_img.png'):
-
+    def save_png_image(cls, dir, image_name):
+        ''' Read the gelsight camera and capture the image. '''
         cls.sensor.get_image()
         cls.sensor.save_image(dir + image_name)
         
@@ -124,23 +123,22 @@ class GelsightMiniClass:
         with h5py.File(self.dir_to_save_img + self.hdf5_file_name, 'r') as f:
                 img_array = f['images'][:] 
 
-
         for i, image_data in enumerate(img_array):
             # Convert the image data to uint8 if necessary
             image_data = np.array(image_data, dtype=np.uint8)
             image_name = '/hdf5_image_' + str(i) + '.png'
-            self.save_png_image(save_images_dir, image_name)
+            cv2.imwrite(save_images_dir + image_name, image_data)
 
 
 
 if __name__ == '__main__':
 
-    gelsight_mini_obj = GelsightMiniClass('test_6.h5')
+    gelsight_mini_obj = GelsightMiniClass('test.h5')
 
-    gelsight_mini_obj.show_image()
+    # gelsight_mini_obj.show_image()
 
-    # gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img)
+    gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img, 'test_img.png')
 
-    # gelsight_mini_obj.save_img_in_hdf5()
+    gelsight_mini_obj.save_img_in_hdf5()
 
-    # gelsight_mini_obj.save_hdf5_as_png()
+    gelsight_mini_obj.save_hdf5_as_png()

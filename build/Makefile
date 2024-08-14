@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /data/users/hmanouch/projects/digit_FT_sensors
+CMAKE_SOURCE_DIR = /home/hamid/UB/projects/digit_FT_sensors
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /data/users/hmanouch/projects/digit_FT_sensors/build
+CMAKE_BINARY_DIR = /home/hamid/UB/projects/digit_FT_sensors/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,8 +69,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles /data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles /home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data/users/hmanouch/projects/digit_FT_sensors/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -190,32 +190,32 @@ src/RFT_UART_SAMPLE.cpp.s:
 	$(MAKE) -f CMakeFiles/robo_ft.dir/build.make CMakeFiles/robo_ft.dir/src/RFT_UART_SAMPLE.cpp.s
 .PHONY : src/RFT_UART_SAMPLE.cpp.s
 
-src_main/test.o: src_main/test.cpp.o
+src_main/FT_sensor.o: src_main/FT_sensor.cpp.o
 
-.PHONY : src_main/test.o
+.PHONY : src_main/FT_sensor.o
 
 # target to build an object file
-src_main/test.cpp.o:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.o
-.PHONY : src_main/test.cpp.o
+src_main/FT_sensor.cpp.o:
+	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.o
+.PHONY : src_main/FT_sensor.cpp.o
 
-src_main/test.i: src_main/test.cpp.i
+src_main/FT_sensor.i: src_main/FT_sensor.cpp.i
 
-.PHONY : src_main/test.i
+.PHONY : src_main/FT_sensor.i
 
 # target to preprocess a source file
-src_main/test.cpp.i:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.i
-.PHONY : src_main/test.cpp.i
+src_main/FT_sensor.cpp.i:
+	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.i
+.PHONY : src_main/FT_sensor.cpp.i
 
-src_main/test.s: src_main/test.cpp.s
+src_main/FT_sensor.s: src_main/FT_sensor.cpp.s
 
-.PHONY : src_main/test.s
+.PHONY : src_main/FT_sensor.s
 
 # target to generate assembly for a file
-src_main/test.cpp.s:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/test.cpp.s
-.PHONY : src_main/test.cpp.s
+src_main/FT_sensor.cpp.s:
+	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.s
+.PHONY : src_main/FT_sensor.cpp.s
 
 # Help Target
 help:
@@ -233,9 +233,9 @@ help:
 	@echo "... src/RFT_UART_SAMPLE.o"
 	@echo "... src/RFT_UART_SAMPLE.i"
 	@echo "... src/RFT_UART_SAMPLE.s"
-	@echo "... src_main/test.o"
-	@echo "... src_main/test.i"
-	@echo "... src_main/test.s"
+	@echo "... src_main/FT_sensor.o"
+	@echo "... src_main/FT_sensor.i"
+	@echo "... src_main/FT_sensor.s"
 .PHONY : help
 
 
