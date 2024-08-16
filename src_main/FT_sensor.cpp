@@ -133,14 +133,21 @@ void readAndPrintFTData(std::string csv_file, CRT_RFT_UART& sensor, int dataRate
 
         // sensor.rqst_FT_Continuous(); // UNCOMMENT ONLY ONCE WHEN YOU REPLUG THE SENSOR, PORT NUMBER CHANGES
 
-        // Assuming the readWorker method continuously reads data into m_RFT_IF_PACKET.m_rcvdForce
+        auto start = std::chrono::high_resolution_clock::now();
         float* FT_data = sensor.m_RFT_IF_PACKET.m_rcvdForce;
+        auto end = std::chrono::high_resolution_clock::now();
+        // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        // std::cout << "Time taken by process: " << <std::float>duration.count() << " milliseconds" << std::endl;
+        std::chrono::duration<double> duration = end - start;
+        std::cout << "Time taken by process: " << duration.count() << " milliseconds" << std::endl;       
 
-		SAVE_FT_TO_CSV_FILE(csv_file, FT_data, img_index);
+
+		// SAVE_FT_TO_CSV_FILE(csv_file, FT_data, img_index);
+        
 		img_index += 1;
 
         // Print the FT data
-        std::cout << "Force-Torque Data: ";
+        // std::cout << "Force-Torque Data: ";
         for (int i = 0; i < 6; ++i) {
             std::cout << FT_data[i];
             if (i < 5) std::cout << ", ";
@@ -148,7 +155,7 @@ void readAndPrintFTData(std::string csv_file, CRT_RFT_UART& sensor, int dataRate
         std::cout << std::endl;
 
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(dataRateInterval));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(dataRateInterval));
     }
 }
 

@@ -5,4 +5,4 @@ CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.o
  ../include/robotous_ft/RFT_IF_PACKET_REV.h
  ../include/robotous_ft/RFT_UART_SAMPLE.h
  ../include/robotous_ft/WinTypes.h
- /home/hamid/UB/projects/digit_FT_sensors/src_main/FT_sensor.cpp
+ /home/hamid/projects/digit_FT_sensors/src_main/FT_sensor.cpp

@@ -92,14 +92,24 @@ class GelsightMiniClass:
 
         print("Start recording images from gelsight-mini (press q to stop)...")
 
-        imgs=[]
+        imgs = []
+        resp_time = []
 
         listener = keyboard.Listener(on_press=self.on_press)
         listener.start()
 
+        start_time = time.time()
+
         while listener.running:
             img = self.sensor.get_image()
             imgs.append(img)
+
+            # end_time = time.time()
+            # resp_time.append(end_time - start_time)
+            # start_time = end_time
+            
+        average_time = sum(resp_time) / len(resp_time)
+        print("average time: ", average_time)
 
         print("\nrecording images stopped...")
 
@@ -133,62 +143,52 @@ class GelsightMiniClass:
 
 
 
-def do_cv_stuff(img1):
+    def do_cv_stuff(self, rgb_gelsight_image):
 
-    img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+        grayScaledImg = cv2.cvtColor(rgb_gelsight_image, cv2.COLOR_RGB2GRAY)
 
-    img3 = cv2.adaptiveThreshold(img2 ,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
-            cv2.THRESH_BINARY_INV,21,4)
-    
-    img3=cv2.medianBlur(img3, 9)
-    img3=cv2.dilate(img3, (3,3), iterations=2)
-    img3=cv2.medianBlur(img3, 3)
-    img3=cv2.dilate(img3, (3,3), iterations=2)
+        thresholdedImg = cv2.adaptiveThreshold(grayScaledImg ,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
+                cv2.THRESH_BINARY_INV,21,4)
+        
+        thresholdedImg=cv2.medianBlur(thresholdedImg, 9)
+        thresholdedImg=cv2.dilate(thresholdedImg, (3,3), iterations=2)
+        thresholdedImg=cv2.medianBlur(thresholdedImg, 3)
+        thresholdedImg=cv2.dilate(thresholdedImg, (3,3), iterations=2)
 
-    # ret, img3 = cv2.threshold(img2, 100, 255, cv2.THRESH_BINARY_INV) 
+        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(thresholdedImg , 8 , cv2.CV_32S)
 
-    # his,bin = np.histogram(img2,bins=np.linspace(0,255,256))
-      
-    # for j in range(len(his)):
-    #     if his[j]>800:
-    #         img2[img2==bin[j]]=0
-    #     else:
-    #         img2[img2==bin[j]]=255
-    # img3=img2
+        centroidLabeledImg = cv2.cvtColor(thresholdedImg,cv2.COLOR_GRAY2BGR)
 
-    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(img3 , 8 , cv2.CV_32S)
+        for i in range(len(stats)):
+            stat = stats[i]
+            x,y,w,h,area = stat
+            if area < 100:
+                centroidLabeledImg[y:y+h,x:x+w]=0
 
-    imgC = cv2.cvtColor(img3,cv2.COLOR_GRAY2BGR)
+        for i in range(len(stats)):
+            stat = stats[i]
+            x,y,w,h,area = stat
 
-    # print(stats[:,4])
-    for i in range(len(stats)):
-        stat = stats[i]
-        x,y,w,h,area = stat
-        if area < 100:
-            imgC[y:y+h,x:x+w]=0
+            if area != np.max(stats[:,4]): # background pixel intensity is the largest area in stats
+                if area > 55:
+                    cv2.rectangle(centroidLabeledImg,[x,y],[x+w,y+h], (255,0,0), 2)    # img, bbox starting corner, bbox ending corner, color, line thickness
 
-    for i in range(len(stats)):
-        stat = stats[i]
-        x,y,w,h,area = stat
-
-        if area != np.max(stats[:,4]): # background pixel intensity is the largest area in stats
-            if area > 55:
-                cv2.rectangle(imgC,[x,y],[x+w,y+h], (255,0,0), 2)    # img, bbox starting corner, bbox ending corner, color, line thickness
-                x,y = centroids[i].astype(int)
-                
-                cv2.circle(imgC,(x,y),2,(0,0,255),2)
+                    x,y = centroids[i].astype(int)
+                    
+                    cv2.circle(centroidLabeledImg,(x,y),2,(0,0,255),2)
 
 
-    # converting back to color so the bboxs are still in red
-    img2 = cv2.cvtColor(img2,cv2.COLOR_GRAY2BGR)
-    img3 = cv2.cvtColor(img3,cv2.COLOR_GRAY2BGR)
-    imgH = np.hstack((img1,img2,img3,imgC))
+        # converting back to color so the bboxs are still in red
+        grayScaledImg = cv2.cvtColor(grayScaledImg,cv2.COLOR_GRAY2BGR)
+        thresholdedImg = cv2.cvtColor(thresholdedImg,cv2.COLOR_GRAY2BGR)
+        imgH = np.hstack((rgb_gelsight_image,grayScaledImg,thresholdedImg,centroidLabeledImg))
+        # imgH = imgC
 
 
-    cv2.imshow('wakka',imgH)
-    if cv2.waitKey(1) & 0xFF==ord('q'):
-        print('quitting program')
-        exit()
+        cv2.imshow('wakka',imgH)
+        if cv2.waitKey(1) & 0xFF==ord('q'):
+            print('quitting program')
+            exit()
     
 
 
@@ -202,10 +202,9 @@ if __name__ == '__main__':
 
     while True:
         f1 = gelsight_mini_obj.sensor.get_image()
-        do_cv_stuff(f1)
+        gelsight_mini_obj.do_cv_stuff(f1)
 
     # gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img, 'test_img.png')
 
     # gelsight_mini_obj.save_img_in_hdf5()
-
     # gelsight_mini_obj.save_hdf5_as_png()

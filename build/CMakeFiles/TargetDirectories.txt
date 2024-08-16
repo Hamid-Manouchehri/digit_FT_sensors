@@ -1,4 +1,4 @@
-/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/rebuild_cache.dir
-/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/edit_cache.dir
-/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/test_ft_sensor.dir
-/home/hamid/UB/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir
+/home/hamid/projects/digit_FT_sensors/build/CMakeFiles/rebuild_cache.dir
+/home/hamid/projects/digit_FT_sensors/build/CMakeFiles/edit_cache.dir
+/home/hamid/projects/digit_FT_sensors/build/CMakeFiles/test_ft_sensor.dir
+/home/hamid/projects/digit_FT_sensors/build/CMakeFiles/robo_ft.dir
