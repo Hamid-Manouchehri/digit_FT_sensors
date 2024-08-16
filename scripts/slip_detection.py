@@ -3,7 +3,7 @@
  * File: slip_detection.py
  * Author: Hamid Manouchehri
  * Email: hmanouch@buffalo.edu
- * Date: August 4, 2024
+ * Date: August 15, 2024
  *
  * Description:
  * This code interfaces with the gelsight mini sensor to detect slip in object.
@@ -32,14 +32,8 @@
 #!/usr/bin/env python3
 
 import cv2
-import sys
-from os import getcwd, makedirs
-from os.path import join, abspath 
-import h5py
 import numpy as np
 import time
-import select
-from pynput import keyboard
 from gelsight import gsdevice 
 
     
@@ -47,6 +41,8 @@ sensor = gsdevice.Camera("GelSight Mini")
 sensor.connect()
 
 img_buff = []
+thresholded_value = 5  # TODO; The less, the more sensitive 
+
 
 if __name__ == '__main__':
 
@@ -55,25 +51,34 @@ if __name__ == '__main__':
 
     while True:
 
+        start = time.time()
         img_gray = sensor.get_image()
-        img_gray = cv2.cvtColor(img_gray, cv2.COLOR_BGR2GRAY)
+        end = time.time()
+        # print("elapsed time: ", end - start)
 
+        start = time.time()
+        img_gray = cv2.cvtColor(img_gray, cv2.COLOR_BGR2GRAY)
+        end = time.time()
+        print("gray scale time: ", end - start)
+
+        start = time.time()
         difference = cv2.absdiff(img_buff, img_gray)
+        end = time.time()
+        # print("calc diff img: ", end - start)
 
         img_buff = img_gray
 
-        thresholded_value = 5
         _, thresholded_diff = cv2.threshold(difference, thresholded_value, 255, cv2.THRESH_BINARY)
 
         # Calculate the number of differing pixels
         non_zero_count = np.count_nonzero(thresholded_diff)
-        
+
         if non_zero_count == 0:
             print("The images are identical.")
+
         else:
             print(f"The images have {non_zero_count} differing pixels.")
             
-            # Show the difference image
             # cv2.imshow('Difference', difference)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
