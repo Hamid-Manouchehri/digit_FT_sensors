@@ -185,7 +185,7 @@ class GelsightMiniClass:
         # imgH = imgC
 
 
-        cv2.imshow('wakka',imgH)
+        cv2.imshow('connected component',imgH)
         if cv2.waitKey(1) & 0xFF==ord('q'):
             print('quitting program')
             exit()

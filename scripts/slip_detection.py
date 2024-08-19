@@ -34,14 +34,35 @@
 import cv2
 import numpy as np
 import time
+from os import getcwd
+from os.path import join, abspath
 from gelsight import gsdevice 
+from datetime import datetime
+from data_logger_methods import setup_csv, save_to_csv
 
+
+img_csv_file_name = 'hello.csv'  # TODO
+
+gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
+parent_dir_abs = abspath(parent_dir)
+dir_to_save_img_csv_files = join(parent_dir_abs, 'data/img_data/img_csv_files/')
+
+fieldnames = ['time', 'pixel_diff']  # TODO
+setup_csv(dir_to_save_img_csv_files, img_csv_file_name, fieldnames)
     
 sensor = gsdevice.Camera("GelSight Mini")
 sensor.connect()
 
 img_buff = []
 thresholded_value = 5  # TODO; The less, the more sensitive 
+
+
+def print_iso8601_time():
+    # Get the current time in ISO 8601 format
+    current_time = datetime.now().isoformat()
+
+    return current_time
 
 
 if __name__ == '__main__':
@@ -51,20 +72,20 @@ if __name__ == '__main__':
 
     while True:
 
-        start = time.time()
+        # start = time.time()
         img_gray = sensor.get_image()
-        end = time.time()
+        # end = time.time()
         # print("elapsed time: ", end - start)
 
-        start = time.time()
+        # start = time.time()
         img_gray = cv2.cvtColor(img_gray, cv2.COLOR_BGR2GRAY)
-        end = time.time()
-        print("gray scale time: ", end - start)
+        # end = time.time()
+        # print("gray scale time: ", end - start)
 
         start = time.time()
         difference = cv2.absdiff(img_buff, img_gray)
         end = time.time()
-        # print("calc diff img: ", end - start)
+        # print("response time: ", end - start)
 
         img_buff = img_gray
 
@@ -77,7 +98,19 @@ if __name__ == '__main__':
             print("The images are identical.")
 
         else:
+            timing = print_iso8601_time()
+            data = {
+                fieldnames[0]: timing,
+                fieldnames[1]: np.array([non_zero_count]).tolist()
+            }
+
+            row = [data[fieldnames[0]]] + data[fieldnames[1]]
+
+            save_to_csv(dir_to_save_img_csv_files, img_csv_file_name, row)
+            print(timing, f"The images have {non_zero_count} differing pixels.")
             print(f"The images have {non_zero_count} differing pixels.")
+            
+
             
             # cv2.imshow('Difference', difference)
             # cv2.waitKey(0)
