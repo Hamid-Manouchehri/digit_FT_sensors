@@ -1,6 +1,6 @@
 /******************************************************************************
  * Project: Force-Torque Sensor Interface
- * File: test.cpp
+ * File: FT_sensor.cpp
  * Author: Hamid Manouchehri
  * Email: hmanouch@buffalo.edu
  * Date: August 4, 2024
@@ -54,7 +54,7 @@ const char* devName = "/dev/ttyUSB"; // Change to const char*
 BYTE port = 0;  // TODO
 DWORD baudRate = B115200;
 DWORD byteSize = CS8;
-int dataRateInterval = 10; // Example: 100 ms for 10 Hz
+int dataRateInterval = 10; // milliseconds, Example: 100 ms for 10 Hz, TODO
 
 
 void initializeCSVFile(std::string csv_file){
@@ -125,7 +125,8 @@ bool setDataRate(CRT_RFT_UART& sensor, int dataRateInterval) {
 // Function to read and print FT data continuously at the specified frequency
 void readAndPrintFTData(std::string csv_file, CRT_RFT_UART& sensor, int dataRateInterval) {
     
-    sensor.set_FT_Bias(1);
+    sensor.set_FT_Bias(1);  // UNCOMMENT ONLY ONCE WHEN YOU REPLUG THE SENSOR, PORT NUMBER CHANGES
+
     sensor.rqst_FT_Continuous();
 	int img_index = 0;
 
@@ -138,11 +139,12 @@ void readAndPrintFTData(std::string csv_file, CRT_RFT_UART& sensor, int dataRate
         auto end = std::chrono::high_resolution_clock::now();
         // auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
         // std::cout << "Time taken by process: " << <std::float>duration.count() << " milliseconds" << std::endl;
-        std::chrono::duration<double> duration = end - start;
-        std::cout << "Time taken by process: " << duration.count() << " milliseconds" << std::endl;       
+
+        // std::chrono::duration<double> duration = end - start;
+        // std::cout << "Time taken by process: " << duration.count() << " milliseconds" << std::endl;       
 
 
-		// SAVE_FT_TO_CSV_FILE(csv_file, FT_data, img_index);
+		// SAVE_FT_TO_CSV_FILE(csv_file, FT_data, img_index);  // TODO
         
 		img_index += 1;
 
@@ -155,7 +157,7 @@ void readAndPrintFTData(std::string csv_file, CRT_RFT_UART& sensor, int dataRate
         std::cout << std::endl;
 
 
-        // std::this_thread::sleep_for(std::chrono::milliseconds(dataRateInterval));
+        std::this_thread::sleep_for(std::chrono::milliseconds(dataRateInterval));
     }
 }
 

@@ -1,0 +1,1 @@
+/usr/bin/c++   -pthread  -rdynamic CMakeFiles/LSL_FT.dir/src_main/LSL_FT.cpp.o  -o ../bin/LSL_FT  -lpthread ../lib/librobo_ft.a 

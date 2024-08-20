@@ -111,17 +111,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_ft_sensor
+# Target rules for targets named LSL_FT
 
 # Build rule for target.
-test_ft_sensor: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_ft_sensor
-.PHONY : test_ft_sensor
+LSL_FT: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 LSL_FT
+.PHONY : LSL_FT
 
 # fast build rule for target.
-test_ft_sensor/fast:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/build
-.PHONY : test_ft_sensor/fast
+LSL_FT/fast:
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/build
+.PHONY : LSL_FT/fast
+
+#=============================================================================
+# Target rules for targets named FT_sensor
+
+# Build rule for target.
+FT_sensor: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 FT_sensor
+.PHONY : FT_sensor
+
+# fast build rule for target.
+FT_sensor/fast:
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/build
+.PHONY : FT_sensor/fast
 
 #=============================================================================
 # Target rules for targets named robo_ft
@@ -196,7 +209,7 @@ src_main/FT_sensor.o: src_main/FT_sensor.cpp.o
 
 # target to build an object file
 src_main/FT_sensor.cpp.o:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.o
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/src_main/FT_sensor.cpp.o
 .PHONY : src_main/FT_sensor.cpp.o
 
 src_main/FT_sensor.i: src_main/FT_sensor.cpp.i
@@ -205,7 +218,7 @@ src_main/FT_sensor.i: src_main/FT_sensor.cpp.i
 
 # target to preprocess a source file
 src_main/FT_sensor.cpp.i:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.i
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/src_main/FT_sensor.cpp.i
 .PHONY : src_main/FT_sensor.cpp.i
 
 src_main/FT_sensor.s: src_main/FT_sensor.cpp.s
@@ -214,8 +227,35 @@ src_main/FT_sensor.s: src_main/FT_sensor.cpp.s
 
 # target to generate assembly for a file
 src_main/FT_sensor.cpp.s:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/src_main/FT_sensor.cpp.s
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/src_main/FT_sensor.cpp.s
 .PHONY : src_main/FT_sensor.cpp.s
+
+src_main/LSL_FT.o: src_main/LSL_FT.cpp.o
+
+.PHONY : src_main/LSL_FT.o
+
+# target to build an object file
+src_main/LSL_FT.cpp.o:
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/src_main/LSL_FT.cpp.o
+.PHONY : src_main/LSL_FT.cpp.o
+
+src_main/LSL_FT.i: src_main/LSL_FT.cpp.i
+
+.PHONY : src_main/LSL_FT.i
+
+# target to preprocess a source file
+src_main/LSL_FT.cpp.i:
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/src_main/LSL_FT.cpp.i
+.PHONY : src_main/LSL_FT.cpp.i
+
+src_main/LSL_FT.s: src_main/LSL_FT.cpp.s
+
+.PHONY : src_main/LSL_FT.s
+
+# target to generate assembly for a file
+src_main/LSL_FT.cpp.s:
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/src_main/LSL_FT.cpp.s
+.PHONY : src_main/LSL_FT.cpp.s
 
 # Help Target
 help:
@@ -225,7 +265,8 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... test_ft_sensor"
+	@echo "... LSL_FT"
+	@echo "... FT_sensor"
 	@echo "... robo_ft"
 	@echo "... src/RFT_IF_PACKET_REV.o"
 	@echo "... src/RFT_IF_PACKET_REV.i"
@@ -236,6 +277,9 @@ help:
 	@echo "... src_main/FT_sensor.o"
 	@echo "... src_main/FT_sensor.i"
 	@echo "... src_main/FT_sensor.s"
+	@echo "... src_main/LSL_FT.o"
+	@echo "... src_main/LSL_FT.i"
+	@echo "... src_main/LSL_FT.s"
 .PHONY : help
 
 

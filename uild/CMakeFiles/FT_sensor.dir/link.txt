@@ -1,0 +1,1 @@
+/usr/bin/c++   -pthread  -rdynamic CMakeFiles/FT_sensor.dir/src_main/FT_sensor.cpp.o  -o ../bin/FT_sensor  -lpthread ../lib/librobo_ft.a 

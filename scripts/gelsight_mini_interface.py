@@ -202,7 +202,10 @@ if __name__ == '__main__':
 
     while True:
         f1 = gelsight_mini_obj.sensor.get_image()
-        gelsight_mini_obj.do_cv_stuff(f1)
+        # start = time.time()
+        # gelsight_mini_obj.do_cv_stuff(f1)
+        # end = time.time()
+        # print(end - start)
 
     # gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img, 'test_img.png')
 

@@ -53,7 +53,8 @@ CMAKE_BINARY_DIR = /home/hamid/projects/digit_FT_sensors/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/test_ft_sensor.dir/all
+all: CMakeFiles/LSL_FT.dir/all
+all: CMakeFiles/FT_sensor.dir/all
 all: CMakeFiles/robo_ft.dir/all
 
 .PHONY : all
@@ -64,37 +65,65 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/test_ft_sensor.dir/clean
+clean: CMakeFiles/LSL_FT.dir/clean
+clean: CMakeFiles/FT_sensor.dir/clean
 clean: CMakeFiles/robo_ft.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/test_ft_sensor.dir
+# Target rules for target CMakeFiles/LSL_FT.dir
 
 # All Build rule for target.
-CMakeFiles/test_ft_sensor.dir/all: CMakeFiles/robo_ft.dir/all
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/depend
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hamid/projects/digit_FT_sensors/build/CMakeFiles --progress-num=4,5 "Built target test_ft_sensor"
-.PHONY : CMakeFiles/test_ft_sensor.dir/all
+CMakeFiles/LSL_FT.dir/all: CMakeFiles/robo_ft.dir/all
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/depend
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hamid/projects/digit_FT_sensors/build/CMakeFiles --progress-num=3,4 "Built target LSL_FT"
+.PHONY : CMakeFiles/LSL_FT.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test_ft_sensor.dir/rule: cmake_check_build_system
+CMakeFiles/LSL_FT.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/hamid/projects/digit_FT_sensors/build/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test_ft_sensor.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/LSL_FT.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/hamid/projects/digit_FT_sensors/build/CMakeFiles 0
-.PHONY : CMakeFiles/test_ft_sensor.dir/rule
+.PHONY : CMakeFiles/LSL_FT.dir/rule
 
 # Convenience name for target.
-test_ft_sensor: CMakeFiles/test_ft_sensor.dir/rule
+LSL_FT: CMakeFiles/LSL_FT.dir/rule
 
-.PHONY : test_ft_sensor
+.PHONY : LSL_FT
 
 # clean rule for target.
-CMakeFiles/test_ft_sensor.dir/clean:
-	$(MAKE) -f CMakeFiles/test_ft_sensor.dir/build.make CMakeFiles/test_ft_sensor.dir/clean
-.PHONY : CMakeFiles/test_ft_sensor.dir/clean
+CMakeFiles/LSL_FT.dir/clean:
+	$(MAKE) -f CMakeFiles/LSL_FT.dir/build.make CMakeFiles/LSL_FT.dir/clean
+.PHONY : CMakeFiles/LSL_FT.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/FT_sensor.dir
+
+# All Build rule for target.
+CMakeFiles/FT_sensor.dir/all: CMakeFiles/robo_ft.dir/all
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/depend
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hamid/projects/digit_FT_sensors/build/CMakeFiles --progress-num=1,2 "Built target FT_sensor"
+.PHONY : CMakeFiles/FT_sensor.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/FT_sensor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hamid/projects/digit_FT_sensors/build/CMakeFiles 5
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/FT_sensor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hamid/projects/digit_FT_sensors/build/CMakeFiles 0
+.PHONY : CMakeFiles/FT_sensor.dir/rule
+
+# Convenience name for target.
+FT_sensor: CMakeFiles/FT_sensor.dir/rule
+
+.PHONY : FT_sensor
+
+# clean rule for target.
+CMakeFiles/FT_sensor.dir/clean:
+	$(MAKE) -f CMakeFiles/FT_sensor.dir/build.make CMakeFiles/FT_sensor.dir/clean
+.PHONY : CMakeFiles/FT_sensor.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/robo_ft.dir
@@ -103,7 +132,7 @@ CMakeFiles/test_ft_sensor.dir/clean:
 CMakeFiles/robo_ft.dir/all:
 	$(MAKE) -f CMakeFiles/robo_ft.dir/build.make CMakeFiles/robo_ft.dir/depend
 	$(MAKE) -f CMakeFiles/robo_ft.dir/build.make CMakeFiles/robo_ft.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hamid/projects/digit_FT_sensors/build/CMakeFiles --progress-num=1,2,3 "Built target robo_ft"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/hamid/projects/digit_FT_sensors/build/CMakeFiles --progress-num=5,6,7 "Built target robo_ft"
 .PHONY : CMakeFiles/robo_ft.dir/all
 
 # Build rule for subdir invocation for target.
