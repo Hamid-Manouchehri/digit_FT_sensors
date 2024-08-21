@@ -28,8 +28,8 @@ find_package(LSL REQUIRED)
 
 
 # compile executables
-add_executable(FT_sensor src_main/FT_sensor.cpp)
-target_link_libraries(FT_sensor pthread robo_ft)
+add_executable(ft_sensor src_main/FT_sensor.cpp)
+target_link_libraries(ft_sensor pthread robo_ft)
 
-add_executable(LSL_FT src_main/LSL_FT.cpp)
-target_link_libraries(LSL_FT pthread robo_ft LSL::lsl)
+add_executable(lsl_ft src_main/LSL_FT.cpp)
+target_link_libraries(lsl_ft pthread robo_ft LSL::lsl)
