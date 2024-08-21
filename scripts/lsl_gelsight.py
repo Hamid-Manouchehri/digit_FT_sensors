@@ -44,7 +44,7 @@ if __name__ == '__main__':
     sensor.connect()
 
     # Define LSL stream
-    info = StreamInfo('GelSightMini', 'Video', 1, 30, 'string')  # Adjust based on your data type
+    info = StreamInfo('GelSightMini', 'Video', 1, 0, 'string')  # Adjust based on your data type
     outlet = StreamOutlet(info)
 
     # Stream data

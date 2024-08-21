@@ -34,24 +34,20 @@ import pyxdf
 from os import getcwd
 from os.path import join, abspath
 
-
-xdf_file_name = 'sub-P001_ses-S002_task-Default_run-001_eeg.xdf'  # TODO
-
-
+xdf_file_name = 'gelsight_fabric_exp_2.xdf'  # TODO
 
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
 parent_dir_abs = abspath(parent_dir)
 dir_to_save_img_csv_files = join(parent_dir_abs, 'data/xdf_files/')
 
-
-
-
 if __name__ == '__main__':
 
-    streams, header = pyxdf.load_xdf(dir_to_save_img_csv_files + xdf_file_name)
+    streams, header = pyxdf.load_xdf(join(dir_to_save_img_csv_files, xdf_file_name))
 
-    print("header: \n", header, '\n')
-    print("streams: \n", streams)
+    for stream in streams:
+        print(stream['info']['name'][0])  # Access the name of each stream
 
-
+    # You can also print other details of the streams if needed
+    # print("header: \n", header, '\n')
+    # print("streams: \n", streams)
