@@ -44,13 +44,16 @@ if __name__ == '__main__':
     sensor.connect()
 
     # Define LSL stream
-    info = StreamInfo('GelSightMini', 'Video', 1, 0, 'string')  # Adjust based on your data type
+    info = StreamInfo('GelSightMini', 'Video', 320*240*3, 0, 'int8')  # Adjust based on your data type
     outlet = StreamOutlet(info)
 
     # Stream data
     while True:
-        frame = str(sensor.get_image())
+        # frame = str(sensor.get_image())
+        frame = sensor.get_image()
+
         # print(frame)
         # print(np.shape(frame))
-        outlet.push_sample([frame])
+        frame = frame.flatten()
+        outlet.push_sample(frame)
 

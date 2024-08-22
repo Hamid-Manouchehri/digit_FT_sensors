@@ -36,7 +36,7 @@ import pyxdf
 from os import getcwd
 from os.path import join, abspath
 
-xdf_file_name = 'gelsight_fabric_exp_2.xdf'  # TODO
+xdf_file_name = 'test10.xdf'  # TODO
 
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
@@ -61,24 +61,9 @@ if __name__ == '__main__':
             raw_voltages = [float(item[0].strip('[]')) for item in raw_voltages]
             voltages_time_stamps =  stream["time_stamps"]
 
-    # print(np.shape(raw_images[10][:]))
-    # print(raw_images[10])
-   
-    print(images_time_stamps)
 
-
-    cleaned_image_string = [s.replace('\n', '') for s in raw_images[10]]
-
-
-    print(cleaned_image_string)
-    
-    cleaned_image_string = cleaned_image_string[0]  # Get the string from the list
-    cleaned_image_string = re.sub(r'[\[\]]', '', cleaned_image_string)  # Remove brackets
-    image_values = cleaned_image_string.split()  # Split string into a list of strings
-
-    # Step 3: Convert the list of strings to a list of floats
-    image_floats = [float(value) for value in image_values]
-
-    print(image_floats)
-
-    # print(cleaned_image_string) 
+    for img in raw_images:
+        i = np.reshape(img,(240, 320,3)).astype('uint8')
+        cv2.imshow('d',i)
+        cv2.waitKey(0)
+    cv2.destroyAllWindows()
