@@ -28,6 +28,8 @@
 #!/usr/bin/env python3
 
 import cv2
+import ast
+import re
 import numpy as np
 import time
 import pyxdf
@@ -43,11 +45,40 @@ dir_to_save_img_csv_files = join(parent_dir_abs, 'data/xdf_files/')
 
 if __name__ == '__main__':
 
-    streams, header = pyxdf.load_xdf(join(dir_to_save_img_csv_files, xdf_file_name))
+    streams, header = pyxdf.load_xdf(dir_to_save_img_csv_files + xdf_file_name)
+
+    # time_series => data
+    # time_stamp => time
 
     for stream in streams:
-        print(stream['info']['name'][0])  # Access the name of each stream
+        if stream["info"]["name"][0] == 'GelSightMini':
+            raw_images = stream["time_series"]
+            # raw_images = [float(item[0].strip('[]')) for item in raw_images[10][0]]
+            images_time_stamps =  stream["time_stamps"]
 
-    # You can also print other details of the streams if needed
-    # print("header: \n", header, '\n')
-    # print("streams: \n", streams)
+        if stream["info"]["name"][0] == 'Sensor_mV':
+            raw_voltages = stream["time_series"]
+            raw_voltages = [float(item[0].strip('[]')) for item in raw_voltages]
+            voltages_time_stamps =  stream["time_stamps"]
+
+    # print(np.shape(raw_images[10][:]))
+    # print(raw_images[10])
+   
+    print(images_time_stamps)
+
+
+    cleaned_image_string = [s.replace('\n', '') for s in raw_images[10]]
+
+
+    print(cleaned_image_string)
+    
+    cleaned_image_string = cleaned_image_string[0]  # Get the string from the list
+    cleaned_image_string = re.sub(r'[\[\]]', '', cleaned_image_string)  # Remove brackets
+    image_values = cleaned_image_string.split()  # Split string into a list of strings
+
+    # Step 3: Convert the list of strings to a list of floats
+    image_floats = [float(value) for value in image_values]
+
+    print(image_floats)
+
+    # print(cleaned_image_string) 
