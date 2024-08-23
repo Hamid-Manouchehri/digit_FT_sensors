@@ -7,6 +7,8 @@
  *
  * Description:
  * This code is for post processing of .xdf files.
+ * NOTE: AFTER starting all the sensors, start Labrecorder and BEFORE stopping 
+ * all the sensors, stop Labrecorder.
  *
  * License:
  * This code is licensed under the MIT License.
@@ -35,35 +37,62 @@ import time
 import pyxdf
 from os import getcwd
 from os.path import join, abspath
+import matplotlib.pyplot as plt
 
-xdf_file_name = 'test10.xdf'  # TODO
+
+xdf_file_name = 'gelsight_fabric_exp_3.xdf'  # TODO
 
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
 parent_dir_abs = abspath(parent_dir)
 dir_to_save_img_csv_files = join(parent_dir_abs, 'data/xdf_files/')
 
+
+def show_xdf_images(raw_images):
+
+    img_width = 320
+    img_height = 240
+    rgb_channels = 3
+
+    for img in raw_images:
+        i = np.reshape(img, (img_height, img_width, rgb_channels)).astype('uint8')
+        cv2.imshow('each image', i)
+        
+        key = cv2.waitKey(0) & 0xFF
+        if key == ord('q'):
+            print('quitting program')
+            break  # Exit the loop to quit the program
+        elif key == ord('n'):
+            continue  # Continue to the next image when 'n' is pressed
+
+    cv2.destroyAllWindows()
+
+
+
 if __name__ == '__main__':
 
     streams, header = pyxdf.load_xdf(dir_to_save_img_csv_files + xdf_file_name)
 
-    # time_series => data
-    # time_stamp => time
-
     for stream in streams:
         if stream["info"]["name"][0] == 'GelSightMini':
-            raw_images = stream["time_series"]
-            # raw_images = [float(item[0].strip('[]')) for item in raw_images[10][0]]
+            raw_xdf_images = stream["time_series"]
             images_time_stamps =  stream["time_stamps"]
 
         if stream["info"]["name"][0] == 'Sensor_mV':
-            raw_voltages = stream["time_series"]
-            raw_voltages = [float(item[0].strip('[]')) for item in raw_voltages]
+            raw_xdf_voltages = stream["time_series"]
+            raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
             voltages_time_stamps =  stream["time_stamps"]
 
+    # show_xdf_images(raw_xdf_images)
 
-    for img in raw_images:
-        i = np.reshape(img,(240, 320,3)).astype('uint8')
-        cv2.imshow('d',i)
-        cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    ## time synchronization:
+    if len(images_time_stamps) <= len(voltages_time_stamps):
+        ## Interpolating voltage data to image time points
+        interpolated_voltage_data = np.interp(images_time_stamps, voltages_time_stamps, raw_xdf_voltages)
+        sync_time = images_time_stamps
+
+    else:
+        ## Interpolating image data to voltage time points
+        interpolated_gelsight_data = np.interp(voltages_time_stamps, images_time_stamps, raw_xdf_images)
+        sync_time = voltages_time_stamps
+

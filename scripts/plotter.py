@@ -3,13 +3,18 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import pyxdf
 from os import getcwd
 from os.path import join, abspath
 import matplotlib.dates as mdates
 from datetime import datetime
 
 
-current_dir = getcwd()
+gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
+parent_dir_abs = abspath(parent_dir)
+dir_to_save_data = join(parent_dir_abs, 'data/')
+
 
 
 def extract_seconds_from_timestamp(timestamp):
@@ -70,16 +75,11 @@ def plotter(csv_file, data_array, main_title):
     plt.pause(0.001)
 
 
-def plot_FT():
+def plot_FT(csv_file_name):
 
-    csv_file_name = 'test_ft_data_file.csv'  # TODO
+    path_to_xdf_file = dir_to_save_data + "/csv_FT_data/"
 
-    parent_dir = join(current_dir, '..')  # # Go one level up from the current_dir
-    parent_dir_abs = abspath(parent_dir)
-    dir_to_save_img = join(parent_dir_abs, 'data/FT_csv_data')
-    file_path_actual_joint_states = dir_to_save_img + '/' + csv_file_name
-
-    df = pd.read_csv(file_path_actual_joint_states)
+    df = pd.read_csv(path_to_xdf_file + csv_file_name)
 
     # Extract actual joint currents
     Fx = np.array(df['Fx'])
@@ -90,8 +90,62 @@ def plot_FT():
     Tz = np.array(df['Tz'])
     FT_sensor = np.array([Fx, Fy, Fz, Tx, Ty, Tz])
 
-    plotter(file_path_actual_joint_states, FT_sensor, main_title='Force-Torque sensor')
+    plotter(path_to_xdf_file, FT_sensor, main_title='Force-Torque sensor')
+
+
+
+def plot_xdf_fabric_sensor(xdf_file_name):
+
+    path_to_xdf_file = dir_to_save_data + "/xdf_files/"
+
+    streams, header = pyxdf.load_xdf(path_to_xdf_file + xdf_file_name)
+
+    for stream in streams:
+        if stream["info"]["name"][0] == 'Sensor_mV':
+            raw_xdf_voltages = stream["time_series"]
+            raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
+            voltages_time_stamps =  stream["time_stamps"]
+
+    plt.figure()
+    plt.plot(voltages_time_stamps, raw_xdf_voltages, label="fabric_sensor")
+
+    plt.title("fabric sensor (xdf)")
+    plt.xlabel("time [s]")
+    plt.ylabel("voltage [v]")
+    plt.legend()
+    plt.show()
+
+
+
+def plot_csv_fabric_sensor(csv_file_name):
+
+    path_to_xdf_file = dir_to_save_data + "/csv_fabric_sensor/"
+
+    df = pd.read_csv(path_to_xdf_file + csv_file_name)
+
+    header = df.columns.tolist()
+
+    print(header)
+
+    time = np.array(df[header[0]])
+    values = np.array(df[header[1]])  # voltages (mV)
+
+    plt.figure()
+    plt.plot(time, values, label="fabric_sensor")
+
+    plt.title("fabric sensor (csv)")
+    plt.xlabel("time [s]")
+    plt.ylabel("voltage [v]")
+    plt.legend()
+    plt.show()
+
+
 
 
 if __name__ == "__main__":
-    plot_FT()
+
+    ## uncomment which function you want to plot.
+    # plot_FT('test_ft_data_file.csv')
+    # plot_xdf_fabric_sensor('gelsight_fabric_exp_3.xdf')
+    plot_csv_fabric_sensor('slip_sensor_log3.csv')
+    

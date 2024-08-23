@@ -43,17 +43,16 @@ if __name__ == '__main__':
     sensor = gsdevice.Camera("GelSight Mini")
     sensor.connect()
 
-    # Define LSL stream
-    info = StreamInfo('GelSightMini', 'Video', 320*240*3, 0, 'int8')  # Adjust based on your data type
+    ## Define LSL stream
+    img_width = 320
+    img_height = 240
+    rgb_channels = 3
+    info = StreamInfo('GelSightMini', 'Video', img_width * img_height * rgb_channels, 0, 'int8')  # Adjust based on your data type
     outlet = StreamOutlet(info)
 
-    # Stream data
+    ## Stream data to LSL:
     while True:
-        # frame = str(sensor.get_image())
         frame = sensor.get_image()
-
-        # print(frame)
-        # print(np.shape(frame))
         frame = frame.flatten()
         outlet.push_sample(frame)
 
