@@ -116,6 +116,9 @@ void readAndStreamFTData(std::string csv_file, CRT_RFT_UART& sensor, lsl::stream
     int img_index = 0;
 
     while (true) {
+
+        // sensor.rqst_FT_Continuous(); // UNCOMMENT ONLY ONCE WHEN YOU REPLUG THE SENSOR, PORT NUMBER CHANGES
+
         float* FT_data = sensor.m_RFT_IF_PACKET.m_rcvdForce;
 
         // Push the sample to the LSL outlet

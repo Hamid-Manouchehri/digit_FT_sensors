@@ -77,9 +77,9 @@ def plotter(csv_file, data_array, main_title):
 
 def plot_FT(csv_file_name):
 
-    path_to_xdf_file = dir_to_save_data + "/csv_FT_data/"
+    csv_file = dir_to_save_data + "csv_FT_data/" + csv_file_name
 
-    df = pd.read_csv(path_to_xdf_file + csv_file_name)
+    df = pd.read_csv(csv_file)
 
     # Extract actual joint currents
     Fx = np.array(df['Fx'])
@@ -90,7 +90,7 @@ def plot_FT(csv_file_name):
     Tz = np.array(df['Tz'])
     FT_sensor = np.array([Fx, Fy, Fz, Tx, Ty, Tz])
 
-    plotter(path_to_xdf_file, FT_sensor, main_title='Force-Torque sensor')
+    plotter(csv_file, FT_sensor, main_title='Force-Torque sensor')
 
 
 
@@ -105,9 +105,11 @@ def plot_xdf_fabric_sensor(xdf_file_name):
             raw_xdf_voltages = stream["time_series"]
             raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
             voltages_time_stamps =  stream["time_stamps"]
+            min_value = min(voltages_time_stamps)
+            time_shifted_to_zero = [num - min_value for num in voltages_time_stamps]
 
     plt.figure()
-    plt.plot(voltages_time_stamps, raw_xdf_voltages, label="fabric_sensor")
+    plt.plot(time_shifted_to_zero, raw_xdf_voltages, label="fabric_sensor")
 
     plt.title("fabric sensor (xdf)")
     plt.xlabel("time [s]")
@@ -125,13 +127,14 @@ def plot_csv_fabric_sensor(csv_file_name):
 
     header = df.columns.tolist()
 
-    print(header)
-
     time = np.array(df[header[0]])
     values = np.array(df[header[1]])  # voltages (mV)
 
+    min_value = min(time)
+    time_shifted_to_zero = [num - min_value for num in time]
+
     plt.figure()
-    plt.plot(time, values, label="fabric_sensor")
+    plt.plot(time_shifted_to_zero, values, label="fabric_sensor")
 
     plt.title("fabric sensor (csv)")
     plt.xlabel("time [s]")
@@ -144,8 +147,9 @@ def plot_csv_fabric_sensor(csv_file_name):
 
 if __name__ == "__main__":
 
+    pass
     ## uncomment which function you want to plot.
-    # plot_FT('test_ft_data_file.csv')
-    # plot_xdf_fabric_sensor('gelsight_fabric_exp_3.xdf')
-    plot_csv_fabric_sensor('slip_sensor_log3.csv')
+    # plot_FT('test_realsetup_ft_data_file.csv')
+    plot_xdf_fabric_sensor('sub-real_setup_ses-real_setup_task-Default_run-001_eeg.xdf')
+    # plot_csv_fabric_sensor('slip_sensor_log3.csv')
     

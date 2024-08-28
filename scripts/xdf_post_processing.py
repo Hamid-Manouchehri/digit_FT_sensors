@@ -35,20 +35,25 @@ import re
 import numpy as np
 import time
 import pyxdf
-from os import getcwd
+from os import getcwd, makedirs
 from os.path import join, abspath
 import matplotlib.pyplot as plt
 
 
-xdf_file_name = 'gelsight_fabric_exp_3.xdf'  # TODO
+xdf_file_name = 'sub-real_setup_ses-real_setup_task-Default_run-001_eeg.xdf'  # TODO
 
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
 parent_dir_abs = abspath(parent_dir)
-dir_to_save_img_csv_files = join(parent_dir_abs, 'data/xdf_files/')
+dir_to_data = join(parent_dir_abs, 'data/')
 
 
 def show_xdf_images(raw_images):
+
+    print("****************************")
+    print("press 'q' to quit")
+    print('Any key to see frames')
+    print("****************************")
 
     img_width = 320
     img_height = 240
@@ -68,10 +73,29 @@ def show_xdf_images(raw_images):
     cv2.destroyAllWindows()
 
 
+def save_xdf_images(folder_name, raw_images):
+
+    img_width = 320
+    img_height = 240
+    rgb_channels = 3
+
+    img_name = 0
+
+    new_folder_path = dir_to_data + 'img_data/' + folder_name
+    makedirs(new_folder_path, exist_ok=True)
+
+    for img in raw_images:
+        i = np.reshape(img, (img_height, img_width, rgb_channels)).astype('uint8')
+
+        cv2.imwrite(new_folder_path + '/' + str(img_name) + '.jpg', i)
+
+        img_name = img_name + 1
+
+
 
 if __name__ == '__main__':
 
-    streams, header = pyxdf.load_xdf(dir_to_save_img_csv_files + xdf_file_name)
+    streams, header = pyxdf.load_xdf(dir_to_data + 'xdf_files/' + xdf_file_name)
 
     for stream in streams:
         if stream["info"]["name"][0] == 'GelSightMini':
@@ -83,7 +107,8 @@ if __name__ == '__main__':
             raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
             voltages_time_stamps =  stream["time_stamps"]
 
-    # show_xdf_images(raw_xdf_images)
+    # show_xdf_images(raw_xdf_images)  
+    # save_xdf_images('a_folder', raw_xdf_images)
 
     ## time synchronization:
     if len(images_time_stamps) <= len(voltages_time_stamps):
