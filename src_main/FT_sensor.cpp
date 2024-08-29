@@ -43,11 +43,10 @@
 #include <fstream>
 #include <unistd.h>
 #include <limits.h> // For PATH_MAX
+#include <yaml-cpp/yaml.h>
 #include "robotous_ft/RFT_UART_SAMPLE.h"
 
 // using namespace std;
-
-std::string FT_csv_file_name = "test_ft_data_file.csv";  // TODO
 
 
 const char* devName = "/dev/ttyUSB"; // Change to const char*
@@ -165,6 +164,7 @@ int main() {
 
     char cwd[PATH_MAX];  // current directory
     std::string full_path_to_FT_csv_file;
+    YAML::Node config = YAML::LoadFile("../config/config.yaml");
 
     // Get the current working directory
     if (getcwd(cwd, sizeof(cwd)) != nullptr) {
@@ -178,7 +178,7 @@ int main() {
             current_dir = current_dir.substr(0, pos);
         }
 
-        full_path_to_FT_csv_file = current_dir + "/data/FT_csv_data/" + FT_csv_file_name;
+        full_path_to_FT_csv_file = config["data__FT_csv_data__ft_data"].as<std::string>();
     
     } 
 

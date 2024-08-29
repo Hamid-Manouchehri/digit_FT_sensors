@@ -25,11 +25,16 @@ set(ROBOTOUS_LIB_SRC
 # find_package(Boost COMPONENTS system signal thread REQUIRED)
 add_library(robo_ft ${ROBOTOUS_LIB_SRC})
 find_package(LSL REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 
 # compile executables
 add_executable(ft_sensor src_main/FT_sensor.cpp)
 target_link_libraries(ft_sensor pthread robo_ft)
+target_link_libraries(ft_sensor yaml-cpp)
 
 add_executable(lsl_ft src_main/LSL_FT.cpp)
 target_link_libraries(lsl_ft pthread robo_ft LSL::lsl)
+target_link_libraries(lsl_ft yaml-cpp)
+
+

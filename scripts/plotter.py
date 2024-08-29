@@ -1,9 +1,37 @@
+''' ******************************************************************************
+ * Project: plot
+ * File: plotter.py
+ * Author: Hamid Manouchehri
+ * Email: hmanouch@buffalo.edu
+ * Date: June 25, 2024
+ *
+ * Description:
+ * This code is for plotting different data.
+ *
+ * License:
+ * This code is licensed under the MIT License.
+ * You may obtain a copy of the License at
+ * 
+ *     https://opensource.org/licenses/MIT
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Disclaimer:
+ * This software is provided "as is", without warranty of any kind, express or
+ * implied, including but not limited to the warranties of merchantability,
+ * fitness for a particular purpose, and noninfringement. In no event shall the
+ * authors be liable for any claim, damages, or other liability, whether in an
+ * action of contract, tort, or otherwise, arising from, out of, or in
+ * connection with the software or the use or other dealings in the software.
+ *
+ ****************************************************************************** '''
 #!/usr/bin/env python3
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import pyxdf
+import yaml
 from os import getcwd
 from os.path import join, abspath
 import matplotlib.dates as mdates
@@ -13,8 +41,8 @@ from datetime import datetime
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
 parent_dir_abs = abspath(parent_dir)
-dir_to_save_data = join(parent_dir_abs, 'data/')
-
+dir_to_config = join(parent_dir_abs, 'config/config.yml')
+config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
 
 
 def extract_seconds_from_timestamp(timestamp):
@@ -32,8 +60,6 @@ def plotter(csv_file, data_array, main_title):
 
     df['time'] = df['time'].apply(extract_seconds_from_timestamp)
     df['time'] = df['time'] - df['time'].min()  # shift time to zero
-
-
 
     num_of_plots = 6
     figure, axis = plt.subplots(3, 2, figsize=(10, 2*num_of_plots), sharex=True)
@@ -77,9 +103,7 @@ def plotter(csv_file, data_array, main_title):
 
 def plot_FT(csv_file_name):
 
-    csv_file = dir_to_save_data + "csv_FT_data/" + csv_file_name
-
-    df = pd.read_csv(csv_file)
+    df = pd.read_csv(csv_file_name)
 
     # Extract actual joint currents
     Fx = np.array(df['Fx'])
@@ -90,15 +114,13 @@ def plot_FT(csv_file_name):
     Tz = np.array(df['Tz'])
     FT_sensor = np.array([Fx, Fy, Fz, Tx, Ty, Tz])
 
-    plotter(csv_file, FT_sensor, main_title='Force-Torque sensor')
+    plotter(csv_file_name, FT_sensor, main_title='Force-Torque sensor')
 
 
 
 def plot_xdf_fabric_sensor(xdf_file_name):
 
-    path_to_xdf_file = dir_to_save_data + "/xdf_files/"
-
-    streams, header = pyxdf.load_xdf(path_to_xdf_file + xdf_file_name)
+    streams, header = pyxdf.load_xdf(xdf_file_name)
 
     for stream in streams:
         if stream["info"]["name"][0] == 'Sensor_mV':
@@ -121,9 +143,7 @@ def plot_xdf_fabric_sensor(xdf_file_name):
 
 def plot_csv_fabric_sensor(csv_file_name):
 
-    path_to_xdf_file = dir_to_save_data + "/csv_fabric_sensor/"
-
-    df = pd.read_csv(path_to_xdf_file + csv_file_name)
+    df = pd.read_csv(csv_file_name)
 
     header = df.columns.tolist()
 
@@ -149,7 +169,7 @@ if __name__ == "__main__":
 
     pass
     ## uncomment which function you want to plot.
-    # plot_FT('test_realsetup_ft_data_file.csv')
-    plot_xdf_fabric_sensor('sub-real_setup_ses-real_setup_task-Default_run-001_eeg.xdf')
-    # plot_csv_fabric_sensor('slip_sensor_log3.csv')
+    # plot_FT(config["data__csv_FT_data__test_realsetup_ft_data_file"])
+    # plot_xdf_fabric_sensor(config["data__xdf_files__xdf_file"])
+    plot_csv_fabric_sensor(config["data__csv_fabric_sensor__sensor_log"])
     

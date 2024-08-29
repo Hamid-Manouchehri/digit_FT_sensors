@@ -37,6 +37,7 @@ import sys
 from os import getcwd, makedirs
 from os.path import join, abspath 
 import h5py
+import yaml
 import numpy as np
 import time
 import select
@@ -44,15 +45,17 @@ from pynput import keyboard
 from gelsight import gsdevice 
 
 
+gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
+parent_dir_abs = abspath(parent_dir)
+dir_to_config = join(parent_dir_abs, 'config/config.yml')
+config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
+
+
 class GelsightMiniClass:
     # Class attribute (shared by all instances of the class)
     sensor = gsdevice.Camera("GelSight Mini")
     sensor.connect()
-
-    gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
-    parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
-    parent_dir_abs = abspath(parent_dir)
-    dir_to_save_img = join(parent_dir_abs, 'data/img_data/')
 
     def __init__(self, hdf5_file_name):
         # Instance attribute (unique to each instance of the class)
@@ -115,7 +118,7 @@ class GelsightMiniClass:
 
         imgs = np.array(imgs)
 
-        with h5py.File(self.dir_to_save_img + self.hdf5_file_name, 'w') as f:
+        with h5py.File(config["data__img_data"] + self.hdf5_file_name, 'w') as f:
             f.create_dataset('images', data=imgs, compression='gzip', compression_opts=5)
 
 
@@ -127,10 +130,10 @@ class GelsightMiniClass:
 
         print("Post processing; saving hdf5 image data into '.png'...")
 
-        save_images_dir = join(self.dir_to_save_img, self.hdf5_file_name.replace(".h5", ""))
+        save_images_dir = join(config["data__img_data"], self.hdf5_file_name.replace(".h5", ""))
         makedirs(save_images_dir, exist_ok=True)  # create the directory for .png images if does not exist.
 
-        with h5py.File(self.dir_to_save_img + self.hdf5_file_name, 'r') as f:
+        with h5py.File(config["data__img_data"] + self.hdf5_file_name, 'r') as f:
                 img_array = f['images'][:] 
 
         for i, image_data in enumerate(img_array):
@@ -207,7 +210,7 @@ if __name__ == '__main__':
         # end = time.time()
         # print(end - start)
 
-    # gelsight_mini_obj.save_png_image(gelsight_mini_obj.dir_to_save_img, 'test_img.png')
+    gelsight_mini_obj.save_png_image(config["data__img_data"], 'test_img.png')
 
-    # gelsight_mini_obj.save_img_in_hdf5()
-    # gelsight_mini_obj.save_hdf5_as_png()
+    gelsight_mini_obj.save_img_in_hdf5()
+    gelsight_mini_obj.save_hdf5_as_png()

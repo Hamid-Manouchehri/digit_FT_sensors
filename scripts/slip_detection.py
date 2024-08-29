@@ -34,6 +34,7 @@
 import cv2
 import numpy as np
 import time
+import yaml
 from os import getcwd
 from os.path import join, abspath
 from gelsight import gsdevice 
@@ -50,9 +51,10 @@ img_buff = []
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
 parent_dir_abs = abspath(parent_dir)
-dir_to_save_img_csv_files = join(parent_dir_abs, 'data/img_data/img_csv_files/')
+dir_to_config = join(parent_dir_abs, 'config/config.yml')
+config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
 
-setup_csv(dir_to_save_img_csv_files, img_csv_file_name, fieldnames)
+setup_csv(config["data__img_data__img_csv_files__slip_detection"], fieldnames)
     
 sensor = gsdevice.Camera("GelSight Mini")
 sensor.connect()
@@ -97,7 +99,7 @@ if __name__ == '__main__':
         }
 
         row = [data[fieldnames[0]]] + data[fieldnames[1]]
-        # save_to_csv(dir_to_save_img_csv_files, img_csv_file_name, row)
+        # save_to_csv(config["data__img_data__img_csv_files__slip_detection"], img_csv_file_name, row)
 
         # print(f"The images have {non_zero_count} differing pixels.")
         

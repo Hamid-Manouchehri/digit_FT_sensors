@@ -1,0 +1,13 @@
+## plotter.py and xdf_post_processing.py
+data__csv_FT_data__test_realsetup_ft_data_file: /home/hamid/projects/digit_FT_sensors/data/csv_FT_data/test_realsetup_ft_data_file.csv
+data__xdf_files__xdf_file: /home/hamid/projects/digit_FT_sensors/data/xdf_files/sub-real_setup_ses-real_setup_task-Default_run-001_eeg.xdf
+data__csv_fabric_sensor__sensor_log: /home/hamid/projects/digit_FT_sensors/data/csv_fabric_sensor/slip_sensor_log3.csv
+
+## slip_detection.py
+data__img_data__img_csv_files__slip_detection: /home/hamid/projects/digit_FT_sensors/data/img_data/img_csv_files/slip_detection.csv
+
+## xdf_post_processing.py and gelsight_mini_interface.py
+data__img_data: /home/hamid/projects/digit_FT_sensors/data/img_data/
+
+## FT_sensor.cpp
+data__FT_csv_data__ft_data: /home/hamid/projects/digit_FT_sensors/data/FT_csv_data/test_ft_data_file.csv

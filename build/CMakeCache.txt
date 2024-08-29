@@ -224,6 +224,9 @@ Powerball_BINARY_DIR:STATIC=/home/hamid/projects/digit_FT_sensors/build
 //Value Computed by CMake
 Powerball_SOURCE_DIR:STATIC=/home/hamid/projects/digit_FT_sensors
 
+//The directory containing a CMake configuration file for yaml-cpp.
+yaml-cpp_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/yaml-cpp
+
 
 ########################
 # INTERNAL cache entries

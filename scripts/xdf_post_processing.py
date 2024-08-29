@@ -33,19 +33,18 @@ import cv2
 import ast
 import re
 import numpy as np
+import yaml
 import time
 import pyxdf
 from os import getcwd, makedirs
 from os.path import join, abspath
-import matplotlib.pyplot as plt
 
-
-xdf_file_name = 'sub-real_setup_ses-real_setup_task-Default_run-001_eeg.xdf'  # TODO
 
 gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
 parent_dir_abs = abspath(parent_dir)
-dir_to_data = join(parent_dir_abs, 'data/')
+dir_to_config = join(parent_dir_abs, 'config/config.yml')
+config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
 
 
 def show_xdf_images(raw_images):
@@ -81,7 +80,7 @@ def save_xdf_images(folder_name, raw_images):
 
     img_name = 0
 
-    new_folder_path = dir_to_data + 'img_data/' + folder_name
+    new_folder_path = config["data__img_data"] + folder_name
     makedirs(new_folder_path, exist_ok=True)
 
     for img in raw_images:
@@ -95,7 +94,7 @@ def save_xdf_images(folder_name, raw_images):
 
 if __name__ == '__main__':
 
-    streams, header = pyxdf.load_xdf(dir_to_data + 'xdf_files/' + xdf_file_name)
+    streams, header = pyxdf.load_xdf(config["data__xdf_files__xdf_file"])
 
     for stream in streams:
         if stream["info"]["name"][0] == 'GelSightMini':
