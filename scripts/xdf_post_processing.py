@@ -36,15 +36,16 @@ import numpy as np
 import yaml
 import time
 import pyxdf
-from os import getcwd, makedirs
-from os.path import join, abspath
+from os import makedirs
+from os.path import join, abspath, dirname
 
 
-gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
-parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
+gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')
 parent_dir_abs = abspath(parent_dir)
-dir_to_config = join(parent_dir_abs, 'config/config.yml')
-config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
+dir_to_config = join(parent_dir_abs, 'config', 'config.yml')
+with open(dir_to_config, 'r') as file:
+    config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
 def show_xdf_images(raw_images):

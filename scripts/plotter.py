@@ -32,17 +32,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pyxdf
 import yaml
-from os import getcwd
-from os.path import join, abspath
+from os.path import join, abspath, dirname
 import matplotlib.dates as mdates
 from datetime import datetime
 
 
-gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
-parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
+gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')
 parent_dir_abs = abspath(parent_dir)
-dir_to_config = join(parent_dir_abs, 'config/config.yml')
-config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
+dir_to_config = join(parent_dir_abs, 'config', 'config.yml')
+with open(dir_to_config, 'r') as file:
+    config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
 def extract_seconds_from_timestamp(timestamp):
@@ -169,7 +169,7 @@ if __name__ == "__main__":
 
     pass
     ## uncomment which function you want to plot.
-    # plot_FT(config["data__csv_FT_data__test_realsetup_ft_data_file"])
+    plot_FT(config["data__csv_FT_data__test_realsetup_ft_data_file"])
     # plot_xdf_fabric_sensor(config["data__xdf_files__xdf_file"])
-    plot_csv_fabric_sensor(config["data__csv_fabric_sensor__sensor_log"])
+    # plot_csv_fabric_sensor(config["data__csv_fabric_sensor__sensor_log"])
     

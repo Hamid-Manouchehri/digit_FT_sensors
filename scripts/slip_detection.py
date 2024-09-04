@@ -35,8 +35,7 @@ import cv2
 import numpy as np
 import time
 import yaml
-from os import getcwd
-from os.path import join, abspath
+from os.path import join, abspath, dirname
 from gelsight import gsdevice 
 from datetime import datetime
 from data_logger_methods import setup_csv, save_to_csv
@@ -48,11 +47,12 @@ fieldnames = ['time', 'pixel_diff']  # TODO
 img_buff = [] 
 
 
-gelsight_mini_interface_dir = getcwd()  # WHATEVER/digit_FT_sensors/scripts
-parent_dir = join(gelsight_mini_interface_dir, '..')  # Go one level up from the current_dir
+gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')
 parent_dir_abs = abspath(parent_dir)
-dir_to_config = join(parent_dir_abs, 'config/config.yml')
-config = yaml.load(open(str(dir_to_config)), Loader=yaml.SafeLoader)
+dir_to_config = join(parent_dir_abs, 'config', 'config.yml')
+with open(dir_to_config, 'r') as file:
+    config = yaml.load(file, Loader=yaml.SafeLoader)
 
 setup_csv(config["data__img_data__img_csv_files__slip_detection"], fieldnames)
     

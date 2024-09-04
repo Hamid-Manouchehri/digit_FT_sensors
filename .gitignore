@@ -2,3 +2,4 @@ src_main/test_cpp/
 data/
 build/
 scripts/__pycache__/
+config/config.yml
