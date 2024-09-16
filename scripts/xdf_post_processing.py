@@ -40,6 +40,8 @@ from os import makedirs
 from os.path import join, abspath, dirname
 
 
+img_folder_name = "fabric_gelsight_v3"  # TODO
+
 gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')
 parent_dir_abs = abspath(parent_dir)
@@ -108,7 +110,7 @@ if __name__ == '__main__':
             voltages_time_stamps =  stream["time_stamps"]
 
     # show_xdf_images(raw_xdf_images)  
-    # save_xdf_images('a_folder', raw_xdf_images)
+    save_xdf_images(img_folder_name, raw_xdf_images)
 
     ## time synchronization:
     if len(images_time_stamps) <= len(voltages_time_stamps):
