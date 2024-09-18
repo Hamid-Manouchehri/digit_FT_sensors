@@ -3,3 +3,4 @@ data/
 build/
 scripts/__pycache__/
 config/config.yml
+scripts/test.py

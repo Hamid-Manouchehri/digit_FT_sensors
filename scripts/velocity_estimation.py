@@ -33,77 +33,127 @@
 
 import cv2
 import numpy as np
-import time
+import cv2
+import yaml
+import math
+from os.path import join, abspath, dirname
+import pandas as pd
 
 
+gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
+parent_dir = join(gelsight_mini_interface_dir, '..')
+parent_dir_abs = abspath(parent_dir)
+dir_to_config = join(parent_dir_abs, 'config', 'config.yml')
+with open(dir_to_config, 'r') as file:
+    config = yaml.load(file, Loader=yaml.SafeLoader)
 
-def calc_vel_of_obj():
-    num_of_img = 7
 
+blob_dist_thresh = .5
 
+def calc_vel_of_obj(current_centroids_list, prev_centroids_list, dt):
 
+    min_euclidean_dist = np.inf
+    sum_min_euclidean_dist = 0
+
+    for current_point in current_centroids_list:
+        for prev_point in prev_centroids_list:
+
+            euclidean_dist = math.sqrt((current_point[0] - prev_point[0])**2 + (current_point[1] - prev_point[1])**2)
+
+            min_euclidean_dist = min(min_euclidean_dist, euclidean_dist)
+
+            # print("euclidean dist: ", euclidean_dist)
+            # print()
+
+        sum_min_euclidean_dist = sum_min_euclidean_dist + min_euclidean_dist
+
+    print(sum_min_euclidean_dist)
+    N = len(current_centroids_list)
+    vel = 1 / N * (sum_min_euclidean_dist) / dt
+
+    return vel
 
 
 def do_cv_stuff(img1_path):
 
-    # Read the image from the file path
-    img1 = cv2.imread(img1_path)
-    
-    if img1 is None:
-        print(f"Error: Image not found at {img1_path}")
-        return
+    current_centroids_list = []
+    buf_centroids_list = []
 
-    # Convert the image to grayscale
-    img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+    df = pd.read_csv(config['velocity_estimation']['img_frame_times'])
 
-    # Apply adaptive thresholding
-    # img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 4)
-    img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 101, 8)
-    
-    # Further processing steps
-    img3 = cv2.medianBlur(img3, 9)
-    img3 = cv2.dilate(img3, (3, 3), iterations=2)
-    img3 = cv2.medianBlur(img3, 3)
-    img3 = cv2.dilate(img3, (3, 3), iterations=2)
+    index_frame_time = np.array(df['index'])
+    frame_time = np.array(df['time'])
 
-    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(img3, 8, cv2.CV_32S)
+    for i in range(131, 165):
 
-    imgC = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
+        img = img1_path + str(i) + ".jpg"
 
-    for i in range(len(stats)):
-        stat = stats[i]
-        x, y, w, h, area = stat
+        # Read the image from the file path
+        img1 = cv2.imread(img)
+        
+        if img1 is None:
+            print(f"Error: Image not found at {img}")
+            return
 
-        if area != np.max(stats[:, 4]):  # Exclude background
-            if area > 145:
-                cv2.rectangle(imgC, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                x, y = centroids[i].astype(int)
-                cv2.circle(imgC, (x, y), 2, (0, 0, 255), 2)
+        # Convert the image to grayscale
+        img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
 
-                print("area: ", area, "centroid: ", x, y)
+        # Apply adaptive thresholding
+        # img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 4)
+        img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 81, 8)
+        
+        # Further processing steps
+        img3 = cv2.medianBlur(img3, 9)
+        img3 = cv2.dilate(img3, (3, 3), iterations=2)
+        img3 = cv2.medianBlur(img3, 3)
+        img3 = cv2.dilate(img3, (3, 3), iterations=2)
 
-    print()
+        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(img3, 8, cv2.CV_32S)
 
-    # Convert back to color so the bbox are still in red
-    img2 = cv2.cvtColor(img2, cv2.COLOR_GRAY2BGR)
-    img3 = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
-    imgH = np.hstack((img1, img2, img3, imgC))
+        imgC = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
 
-    cv2.imshow('Processed Image', imgC)
+        for i in range(len(stats)):
+            stat = stats[i]
+            x, y, w, h, area = stat
 
-    # calc_vel_of_obj(imgC)
+            if area != np.max(stats[:, 4]):  # Exclude background
+                if area > 150:
+                    cv2.rectangle(imgC, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                    x, y = centroids[i].astype(int)
+                    cv2.circle(imgC, (x, y), 2, (0, 0, 255), 2)
+                    
+                    current_centroids_list.append([x,y])
 
-    if cv2.waitKey(0) & 0xFF == ord('q'):
-        print('Quitting program')
-        exit()
+                    # print("area: ", area, "centroid: ", x, y)
 
-    # cv2.waitKey(50)
-    # cv2.destroyAllWindows()
+        # print(centroids_list)
+        # print()
+
+        img2 = cv2.cvtColor(img2, cv2.COLOR_GRAY2BGR)
+        img3 = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
+        imgH = np.hstack((img1, img2, img3, imgC))
+
+        cv2.imshow('Processed Image', imgC)
+
+        if not buf_centroids_list is False:
+            delta_t = frame_time[i+1] - frame_time[i]
+            vel = calc_vel_of_obj(current_centroids_list, buf_centroids_list, delta_t)
+
+            print('vel: ', vel)
+
+        buf_centroids_list = current_centroids_list
+        current_centroids_list = []
+
+        if cv2.waitKey(0) & 0xFF == ord('q'):
+            print('Quitting program')
+            exit()
+
+        # cv2.waitKey(50)
+        # cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
 
-    path_to_blobs = '/data/users/hmanouch/projects/digit_FT_sensors/data/img_data/fabric_gelsight_v7_blobs/'
+    path_to_blobs = config["velocity_estimation"]["blob_img_dir"]
 
-    for i in range(127, 138):
-        do_cv_stuff(path_to_blobs + str(i) + ".jpg")
+    do_cv_stuff(path_to_blobs)

@@ -169,7 +169,7 @@ if __name__ == "__main__":
 
     pass
     ## uncomment which function you want to plot.
-    plot_FT(config["data__csv_FT_data__test_realsetup_ft_data_file"])
-    # plot_xdf_fabric_sensor(config["data__xdf_files__xdf_file"])
-    # plot_csv_fabric_sensor(config["data__csv_fabric_sensor__sensor_log"])
+    plot_FT(config["plotter"]["test_realsetup_ft_data_csv"])
+    # plot_xdf_fabric_sensor(config["plotter"]["fabric_gelsight_xdf"])
+    # plot_csv_fabric_sensor(config["plotter"]["sensor_log_csv"])
     

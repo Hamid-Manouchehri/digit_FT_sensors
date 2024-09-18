@@ -178,7 +178,7 @@ int main() {
             current_dir = current_dir.substr(0, pos);
         }
 
-        full_path_to_FT_csv_file = config["data__FT_csv_data__ft_data"].as<std::string>();
+        full_path_to_FT_csv_file = config["ft_data_csv"].as<std::string>();
     
     } 
 

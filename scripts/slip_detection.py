@@ -54,7 +54,7 @@ dir_to_config = join(parent_dir_abs, 'config', 'config.yml')
 with open(dir_to_config, 'r') as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
-setup_csv(config["data__img_data__img_csv_files__slip_detection"], fieldnames)
+setup_csv(config["slip_detection"]["img_slip_detection_csv"], fieldnames)
     
 sensor = gsdevice.Camera("GelSight Mini")
 sensor.connect()
@@ -99,7 +99,7 @@ if __name__ == '__main__':
         }
 
         row = [data[fieldnames[0]]] + data[fieldnames[1]]
-        # save_to_csv(config["data__img_data__img_csv_files__slip_detection"], img_csv_file_name, row)
+        # save_to_csv(config["slip_detection"]["img_slip_detection_csv"], img_csv_file_name, row)
 
         # print(f"The images have {non_zero_count} differing pixels.")
         
