@@ -97,7 +97,7 @@ def plotter(csv_file, data_array, main_title):
 
 
     plt.tight_layout(rect=[0, 0, 1, 0.96])
-    plt.show()
+    plt.show(block=False)
     plt.pause(0.001)
 
 
@@ -133,11 +133,11 @@ def plot_xdf_fabric_sensor(xdf_file_name):
     plt.figure()
     plt.plot(time_shifted_to_zero, raw_xdf_voltages, label="fabric_sensor")
 
-    plt.title("fabric sensor (xdf)")
-    plt.xlabel("time [s]")
-    plt.ylabel("voltage [v]")
+    plt.title("fabric sensor (xdf)", fontsize=15)
+    plt.xlabel("time [s]", fontsize=15)
+    plt.ylabel("voltage [v]", fontsize=15)
     plt.legend()
-    plt.show()
+    plt.show(block=False)
 
 
 
@@ -156,20 +156,68 @@ def plot_csv_fabric_sensor(csv_file_name):
     plt.figure()
     plt.plot(time_shifted_to_zero, values, label="fabric_sensor")
 
-    plt.title("fabric sensor (csv)")
-    plt.xlabel("time [s]")
-    plt.ylabel("voltage [v]")
+    plt.title("fabric sensor (csv)", fontsize=15)
+    plt.xlabel("time [s]", fontsize=15)
+    plt.ylabel("voltage [v]", fontsize=15)
     plt.legend()
-    plt.show()
+    plt.show(block=False)
+
+
+def plot_ur5e_tool_lin_velocity(csv_file_name):
+
+    df = pd.read_csv(csv_file_name)
+
+    header = df.columns.tolist()
+
+    time = np.array(df[header[0]])
+    vel_x = np.array(df[header[1]])
+    vel_y = np.array(df[header[2]])
+    vel_z = np.array(df[header[3]])
+
+    min_value = min(time)
+    time_shifted_to_zero = [num - min_value for num in time]
+
+    plt.figure()
+    plt.plot(time_shifted_to_zero, vel_x, label="vel_x")
+    plt.plot(time_shifted_to_zero, vel_y, label="vel_y")
+    plt.plot(time_shifted_to_zero, vel_z, label="vel_z")
+
+    plt.title("UR5e actual tool velocity", fontsize=15)
+    plt.xlabel("time [s]", fontsize=15)
+    plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
+    plt.legend()
+    plt.show(block=False)
+
+
+def plot_img_velocity_estimation(csv_file_name):
+
+    df = pd.read_csv(csv_file_name)
+
+    header = df.columns.tolist()
+
+    time = np.array(df[header[0]])
+    vel = np.array(df[header[1]])
+
+    plt.figure()
+    plt.plot(time, vel, label="vel")
+
+    plt.title("UR5e tool velocity estimation (gelsight)", fontsize=15)
+    plt.xlabel("time [s]", fontsize=15)
+    plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
+    plt.legend()
+    plt.show(block=False)
+
 
 
 
 
 if __name__ == "__main__":
 
-    pass
     ## uncomment which function you want to plot.
-    plot_FT(config["plotter"]["test_realsetup_ft_data_csv"])
+    # plot_FT(config["plotter"]["test_realsetup_ft_data_csv"])
     # plot_xdf_fabric_sensor(config["plotter"]["fabric_gelsight_xdf"])
     # plot_csv_fabric_sensor(config["plotter"]["sensor_log_csv"])
+    plot_ur5e_tool_lin_velocity(config["plotter"]["ur5e_tool_lin_vel_csv"])
+    plot_img_velocity_estimation(config["plotter"]["img_velocity_estimation"])
     
+    plt.show()  # simultaneaus plotting

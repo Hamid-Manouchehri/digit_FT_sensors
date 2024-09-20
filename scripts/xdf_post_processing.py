@@ -41,8 +41,6 @@ from os.path import join, abspath, dirname
 from data_logger_methods import setup_csv, save_to_csv
 
 
-img_folder_name = "fabric_gelsight_v13"  # TODO
-
 gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
 parent_dir = join(gelsight_mini_interface_dir, '..')
 parent_dir_abs = abspath(parent_dir)
@@ -79,7 +77,7 @@ def show_xdf_images(raw_images):
     cv2.destroyAllWindows()
 
 
-def save_xdf_images(folder_name, raw_images):
+def save_xdf_images(raw_images):
 
     img_width = 320
     img_height = 240
@@ -87,7 +85,7 @@ def save_xdf_images(folder_name, raw_images):
 
     img_name = 0
 
-    new_folder_path = config["xdf_post_processing"]["img_data_dir"] + folder_name
+    new_folder_path = config["xdf_post_processing"]["img_data"]
     makedirs(new_folder_path, exist_ok=True)
 
     for img in raw_images:
@@ -109,7 +107,7 @@ def save_img_time_stamps(img_time_stamps):
             fieldnames[1]: tm
         }
 
-        row = [data[fieldnames[0]]]  + [data[fieldnames[1]]]
+        row = [data[fieldnames[0]]] + [data[fieldnames[1]]]
         save_to_csv(config["xdf_post_processing"]["img_frame_times"], row)
 
         index = index + 1
@@ -130,10 +128,9 @@ if __name__ == '__main__':
             raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
             voltages_time_stamps =  stream["time_stamps"]
 
-    # print(len(images_time_stamps))
     # show_xdf_images(raw_xdf_images)  
     save_img_time_stamps(images_time_stamps)
-    # save_xdf_images(img_folder_name, raw_xdf_images)
+    # save_xdf_images(raw_xdf_images)
 
     ## time synchronization:
     if len(images_time_stamps) <= len(voltages_time_stamps):

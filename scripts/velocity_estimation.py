@@ -38,6 +38,8 @@ import yaml
 import math
 from os.path import join, abspath, dirname
 import pandas as pd
+from data_logger_methods import setup_csv, save_to_csv
+
 
 
 gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
@@ -48,28 +50,33 @@ with open(dir_to_config, 'r') as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
+velocity_estimation_fieldnames = ['time', 'vel']  # TODO
+setup_csv(config["velocity_estimation"]["img_velocity_estimation"], velocity_estimation_fieldnames)
+
 blob_dist_thresh = .5
 
 def calc_vel_of_obj(current_centroids_list, prev_centroids_list, dt):
 
     min_euclidean_dist = np.inf
-    sum_min_euclidean_dist = 0
+    sum_min_velocity = 0
+    pixels_in_one_meter = 44000
 
     for current_point in current_centroids_list:
         for prev_point in prev_centroids_list:
 
-            euclidean_dist = math.sqrt((current_point[0] - prev_point[0])**2 + (current_point[1] - prev_point[1])**2)
+            euclidean_dist = math.sqrt(((current_point[0] - prev_point[0]) / pixels_in_one_meter)**2
+                                        + ((current_point[1] - prev_point[1]) / pixels_in_one_meter)**2)
 
             min_euclidean_dist = min(min_euclidean_dist, euclidean_dist)
 
             # print("euclidean dist: ", euclidean_dist)
             # print()
 
-        sum_min_euclidean_dist = sum_min_euclidean_dist + min_euclidean_dist
+        sum_min_velocity = sum_min_velocity + min_euclidean_dist / dt
 
-    print(sum_min_euclidean_dist)
     N = len(current_centroids_list)
-    vel = 1 / N * (sum_min_euclidean_dist) / dt
+    # print("N: ", N)
+    vel = sum_min_velocity / N
 
     return vel
 
@@ -78,13 +85,14 @@ def do_cv_stuff(img1_path):
 
     current_centroids_list = []
     buf_centroids_list = []
+    init_time = 0
 
     df = pd.read_csv(config['velocity_estimation']['img_frame_times'])
 
     index_frame_time = np.array(df['index'])
     frame_time = np.array(df['time'])
 
-    for i in range(131, 165):
+    for i in range(174, 445):
 
         img = img1_path + str(i) + ".jpg"
 
@@ -124,7 +132,7 @@ def do_cv_stuff(img1_path):
                     
                     current_centroids_list.append([x,y])
 
-                    # print("area: ", area, "centroid: ", x, y)
+                    # print("centroid: ", x, y)
 
         # print(centroids_list)
         # print()
@@ -133,13 +141,26 @@ def do_cv_stuff(img1_path):
         img3 = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
         imgH = np.hstack((img1, img2, img3, imgC))
 
-        cv2.imshow('Processed Image', imgC)
+        # cv2.imshow('Processed Image', imgH)
+        # cv2.imshow('Processed Image', imgC)
 
         if not buf_centroids_list is False:
-            delta_t = frame_time[i+1] - frame_time[i]
-            vel = calc_vel_of_obj(current_centroids_list, buf_centroids_list, delta_t)
 
-            print('vel: ', vel)
+            delta_t = frame_time[i+1] - frame_time[i]
+            # print("dt: ", delta_t)
+            vel = calc_vel_of_obj(current_centroids_list, buf_centroids_list, delta_t)
+            
+            data = {
+                velocity_estimation_fieldnames[0]: init_time,
+                velocity_estimation_fieldnames[1]: vel
+            }
+
+            row = [data[velocity_estimation_fieldnames[0]]] + [data[velocity_estimation_fieldnames[1]]]
+            save_to_csv(config["velocity_estimation"]["img_velocity_estimation"], row)
+
+            init_time = init_time + delta_t
+
+            # print('vel: ', vel)
 
         buf_centroids_list = current_centroids_list
         current_centroids_list = []
@@ -154,6 +175,6 @@ def do_cv_stuff(img1_path):
 
 if __name__ == '__main__':
 
-    path_to_blobs = config["velocity_estimation"]["blob_img_dir"]
+    path_to_blobs = config["velocity_estimation"]["img_data_dir"]
 
     do_cv_stuff(path_to_blobs)
