@@ -33,8 +33,7 @@ import numpy as np
 import pyxdf
 import yaml
 from os.path import join, abspath, dirname
-import matplotlib.dates as mdates
-from datetime import datetime
+from scipy.fftpack import fft, ifft
 
 
 gelsight_mini_interface_dir = dirname(abspath(__file__))  # WHATEVER/digit_FT_sensors/scripts
@@ -177,10 +176,15 @@ def plot_ur5e_tool_lin_velocity(csv_file_name):
     min_value = min(time)
     time_shifted_to_zero = [num - min_value for num in time]
 
-    plt.figure()
-    plt.plot(time_shifted_to_zero, vel_x, label="vel_x")
+    # plt.figure()
+    # plt.plot(frequencies[:len(frequencies)//2], np.abs(fft_signal)[:len(frequencies)//2])
+    # plt.title("FFT of Noisy Signal")
+    # plt.xlabel("Frequency [Hz]")
+    # plt.ylabel("Amplitude")
+    # plt.sho
+    # plt.plot(time_shifted_to_zero, vel_x, label="vel_x")
     plt.plot(time_shifted_to_zero, vel_y, label="vel_y")
-    plt.plot(time_shifted_to_zero, vel_z, label="vel_z")
+    # plt.plot(time_shifted_to_zero, vel_z, label="vel_z")
 
     plt.title("UR5e actual tool velocity", fontsize=15)
     plt.xlabel("time [s]", fontsize=15)
@@ -195,20 +199,59 @@ def plot_img_velocity_estimation(csv_file_name):
 
     header = df.columns.tolist()
 
-    time = np.array(df[header[0]])
-    vel = np.array(df[header[1]])
+    time = np.array(df[header[0]])[1:]
+    vel = np.array(df[header[1]])[1:]  # discarding the first element (inf)
 
     plt.figure()
+    # plt.plot(time, vel, label="vel")
+
+    # plt.title("UR5e tool velocity estimation (gelsight)", fontsize=15)
+    # plt.xlabel("time [s]", fontsize=15)
+    # plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
+    # plt.legend()
+    # plt.show(block=False)
+
+    # Perform FFT
+    fft_signal = fft(vel)
+    frequencies = np.fft.fftfreq(len(time), time[1] - time[0])
+
+    # plt.figure()
+    # plt.plot(frequencies[:len(frequencies)//2], np.abs(fft_signal)[:len(frequencies)//2])
+    # plt.title("FFT of Noisy Signal")
+    # plt.xlabel("Frequency [Hz]")
+    # plt.ylabel("Amplitude")
+    # plt.show()
+
+    cutoff = 1  # TODO
+    fft_signal_filtered = np.where(np.abs(frequencies) > cutoff, 0, fft_signal)
+
+    filtered_signal = ifft(fft_signal_filtered)
+
+    # plt.figure()
+    # plt.plot(time, np.real(filtered_signal), label="Filtered Signal")
+
+    # plt.title("Filtered UR5e tool velocity estimation (gelsight)", fontsize=15)
+    # plt.xlabel("time [s]", fontsize=15)
+    # plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
+    # plt.legend()
+    # plt.show(block=False)
+
+
+    plt.subplot(2, 1, 1)
     plt.plot(time, vel, label="vel")
-
-    plt.title("UR5e tool velocity estimation (gelsight)", fontsize=15)
     plt.xlabel("time [s]", fontsize=15)
-    plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
-    plt.legend()
-    plt.show(block=False)
+    plt.ylabel("velocity from images [m/s^2]", fontsize=15)
 
+    #plot 2:
+    # x = np.array([0, 1, 2, 3])
+    # y = np.array([10, 20, 30, 40])
 
+    plt.subplot(2, 1, 2)
+    plt.plot(time, np.real(filtered_signal), label="Filtered Signal")
+    plt.xlabel("time [s]", fontsize=15)
+    plt.ylabel("velocity after filtering [m/s^2]", fontsize=15)
 
+    plt.show()
 
 
 if __name__ == "__main__":
