@@ -49,9 +49,6 @@ with open(dir_to_config, 'r') as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
-fieldnames = ['index', 'time']  # TODO
-setup_csv(config["xdf_post_processing"]["img_frame_times"], fieldnames)
-
 def show_xdf_images(raw_images):
 
     print("****************************")
@@ -77,7 +74,7 @@ def show_xdf_images(raw_images):
     cv2.destroyAllWindows()
 
 
-def save_xdf_images(raw_images):
+def save_xdf_images(raw_images, file_path, folder_name):
 
     img_width = 320
     img_height = 240
@@ -85,7 +82,7 @@ def save_xdf_images(raw_images):
 
     img_name = 0
 
-    new_folder_path = config["xdf_post_processing"]["img_data"]
+    new_folder_path = file_path + folder_name
     makedirs(new_folder_path, exist_ok=True)
 
     for img in raw_images:
@@ -96,9 +93,11 @@ def save_xdf_images(raw_images):
         img_name = img_name + 1
 
 
-def save_img_time_stamps(img_time_stamps):
+def save_img_time_stamps(img_time_stamps, file_path):
 
     index = 0
+    fieldnames = ['index', 'time']
+    setup_csv(file_path, fieldnames)
 
     for tm in img_time_stamps:
 
@@ -108,10 +107,25 @@ def save_img_time_stamps(img_time_stamps):
         }
 
         row = [data[fieldnames[0]]] + [data[fieldnames[1]]]
-        save_to_csv(config["xdf_post_processing"]["img_frame_times"], row)
+        save_to_csv(file_path, row)
 
         index = index + 1
 
+
+def save_xdf_voltages(voltage_time_stamp, voltage_data, file_path):
+
+    fieldnames = ['time', 'voltage']
+    setup_csv(file_path, fieldnames)
+
+    for i in range(len(voltage_time_stamp)):
+
+        data = {
+            fieldnames[0]: voltage_time_stamp[i],
+            fieldnames[1]: voltage_data[i]
+        }
+
+        row = [data[fieldnames[0]]] + [data[fieldnames[1]]]
+        save_to_csv(file_path, row)
 
 
 if __name__ == '__main__':
@@ -128,18 +142,21 @@ if __name__ == '__main__':
             raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
             voltages_time_stamps =  stream["time_stamps"]
 
-    # show_xdf_images(raw_xdf_images)  
-    save_img_time_stamps(images_time_stamps)
-    # save_xdf_images(raw_xdf_images)
+    # save_img_time_stamps(images_time_stamps, config["xdf_post_processing"]["img_frame_times"])
+    # save_xdf_images(raw_xdf_images, config["xdf_post_processing"]["img_data"], "fabric_gelsight_new_v0")
+
+    # save_xdf_voltages(voltages_time_stamps, raw_xdf_voltages, config["xdf_post_processing"]["fabric_data"])
+
+
 
     ## time synchronization:
     if len(images_time_stamps) <= len(voltages_time_stamps):
         ## Interpolating voltage data to image time points
         interpolated_voltage_data = np.interp(images_time_stamps, voltages_time_stamps, raw_xdf_voltages)
         sync_time = images_time_stamps
+        # save_img_time_stamps(config["xdf_post_processing"]["sync_gelsight_fabric_time"], voltages_time_stamps)
 
     else:
         ## Interpolating image data to voltage time points
         interpolated_gelsight_data = np.interp(voltages_time_stamps, images_time_stamps, raw_xdf_images)
         sync_time = voltages_time_stamps
-

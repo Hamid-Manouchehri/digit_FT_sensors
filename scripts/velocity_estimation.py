@@ -50,11 +50,6 @@ with open(dir_to_config, 'r') as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
 
-velocity_estimation_fieldnames = ['time', 'vel']  # TODO
-setup_csv(config["velocity_estimation"]["img_velocity_estimation"], velocity_estimation_fieldnames)
-
-blob_dist_thresh = .5
-
 def calc_vel_of_obj(current_centroids_list, prev_centroids_list, dt):
 
     min_euclidean_dist = np.inf
@@ -74,6 +69,7 @@ def calc_vel_of_obj(current_centroids_list, prev_centroids_list, dt):
 
         sum_min_velocity = sum_min_velocity + min_euclidean_dist / dt
 
+    # if current_centroids_list == prev_centroids_list
     N = len(current_centroids_list)
     # print("N: ", N)
     vel = sum_min_velocity / N
@@ -92,23 +88,28 @@ def do_cv_stuff(img1_path):
     index_frame_time = np.array(df['index'])
     frame_time = np.array(df['time'])
 
-    for i in range(174, 445):
+    velocity_estimation_fieldnames = ['time', 'vel']  # TODO
+    setup_csv(config["velocity_estimation"]["img_velocity_estimation"], velocity_estimation_fieldnames)
+    
+    for i in range(280, 640):
 
         img = img1_path + str(i) + ".jpg"
 
         # Read the image from the file path
         img1 = cv2.imread(img)
+        # cv2.imshow('Processed Image', img1)
+        # cv2.waitKey(0)
         
         if img1 is None:
             print(f"Error: Image not found at {img}")
             return
 
-        # Convert the image to grayscale
         img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
 
         # Apply adaptive thresholding
-        # img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 21, 4)
         img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 81, 8)
+        # cv2.imshow('Processed Image', img3)
+        # cv2.waitKey(0)
         
         # Further processing steps
         img3 = cv2.medianBlur(img3, 9)
@@ -119,39 +120,33 @@ def do_cv_stuff(img1_path):
         num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(img3, 8, cv2.CV_32S)
 
         imgC = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
+        # cv2.imshow('Processed Image', imgC)
+        # cv2.waitKey(0)
+        # print("stats: \n", stats)
 
-        for i in range(len(stats)):
-            stat = stats[i]
+        for j in range(len(stats)):
+            stat = stats[j]
             x, y, w, h, area = stat
 
             if area != np.max(stats[:, 4]):  # Exclude background
                 if area > 150:
                     cv2.rectangle(imgC, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                    x, y = centroids[i].astype(int)
+                    x, y = centroids[j].astype(int)
                     cv2.circle(imgC, (x, y), 2, (0, 0, 255), 2)
                     
                     current_centroids_list.append([x,y])
 
-                    # print("centroid: ", x, y)
-
-        # print(centroids_list)
-        # print()
-
         img2 = cv2.cvtColor(img2, cv2.COLOR_GRAY2BGR)
         img3 = cv2.cvtColor(img3, cv2.COLOR_GRAY2BGR)
         imgH = np.hstack((img1, img2, img3, imgC))
-
         # cv2.imshow('Processed Image', imgH)
-        # cv2.imshow('Processed Image', imgC)
 
-        if not buf_centroids_list is False:
-
+        if buf_centroids_list is not []:
             delta_t = frame_time[i+1] - frame_time[i]
-            # print("dt: ", delta_t)
             vel = calc_vel_of_obj(current_centroids_list, buf_centroids_list, delta_t)
-            
+
             data = {
-                velocity_estimation_fieldnames[0]: init_time,
+                velocity_estimation_fieldnames[0]: frame_time[i],
                 velocity_estimation_fieldnames[1]: vel
             }
 
@@ -159,8 +154,6 @@ def do_cv_stuff(img1_path):
             save_to_csv(config["velocity_estimation"]["img_velocity_estimation"], row)
 
             init_time = init_time + delta_t
-
-            # print('vel: ', vel)
 
         buf_centroids_list = current_centroids_list
         current_centroids_list = []

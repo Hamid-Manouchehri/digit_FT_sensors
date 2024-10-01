@@ -116,30 +116,6 @@ def plot_FT(csv_file_name):
     plotter(csv_file_name, FT_sensor, main_title='Force-Torque sensor')
 
 
-
-def plot_xdf_fabric_sensor(xdf_file_name):
-
-    streams, header = pyxdf.load_xdf(xdf_file_name)
-
-    for stream in streams:
-        if stream["info"]["name"][0] == 'Sensor_mV':
-            raw_xdf_voltages = stream["time_series"]
-            raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
-            voltages_time_stamps =  stream["time_stamps"]
-            min_value = min(voltages_time_stamps)
-            time_shifted_to_zero = [num - min_value for num in voltages_time_stamps]
-
-    plt.figure()
-    plt.plot(time_shifted_to_zero, raw_xdf_voltages, label="fabric_sensor")
-
-    plt.title("fabric sensor (xdf)", fontsize=15)
-    plt.xlabel("time [s]", fontsize=15)
-    plt.ylabel("voltage [v]", fontsize=15)
-    plt.legend()
-    plt.show(block=False)
-
-
-
 def plot_csv_fabric_sensor(csv_file_name):
 
     df = pd.read_csv(csv_file_name)
@@ -153,7 +129,7 @@ def plot_csv_fabric_sensor(csv_file_name):
     time_shifted_to_zero = [num - min_value for num in time]
 
     plt.figure()
-    plt.plot(time_shifted_to_zero, values, label="fabric_sensor")
+    plt.plot(time, values, label="fabric_sensor")
 
     plt.title("fabric sensor (csv)", fontsize=15)
     plt.xlabel("time [s]", fontsize=15)
@@ -165,9 +141,7 @@ def plot_csv_fabric_sensor(csv_file_name):
 def plot_ur5e_tool_lin_velocity(csv_file_name):
 
     df = pd.read_csv(csv_file_name)
-
     header = df.columns.tolist()
-
     time = np.array(df[header[0]])
     vel_x = np.array(df[header[1]])
     vel_y = np.array(df[header[2]])
@@ -182,9 +156,9 @@ def plot_ur5e_tool_lin_velocity(csv_file_name):
     # plt.xlabel("Frequency [Hz]")
     # plt.ylabel("Amplitude")
     # plt.sho
-    # plt.plot(time_shifted_to_zero, vel_x, label="vel_x")
-    plt.plot(time_shifted_to_zero, vel_y, label="vel_y")
-    # plt.plot(time_shifted_to_zero, vel_z, label="vel_z")
+    plt.plot(time, vel_x, label="vel_x")
+    plt.plot(time, vel_y, label="vel_y")
+    plt.plot(time, vel_z, label="vel_z")
 
     plt.title("UR5e actual tool velocity", fontsize=15)
     plt.xlabel("time [s]", fontsize=15)
@@ -203,48 +177,20 @@ def plot_img_velocity_estimation(csv_file_name):
     vel = np.array(df[header[1]])[1:]  # discarding the first element (inf)
 
     plt.figure()
-    # plt.plot(time, vel, label="vel")
-
-    # plt.title("UR5e tool velocity estimation (gelsight)", fontsize=15)
-    # plt.xlabel("time [s]", fontsize=15)
-    # plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
-    # plt.legend()
-    # plt.show(block=False)
 
     # Perform FFT
     fft_signal = fft(vel)
     frequencies = np.fft.fftfreq(len(time), time[1] - time[0])
 
-    # plt.figure()
-    # plt.plot(frequencies[:len(frequencies)//2], np.abs(fft_signal)[:len(frequencies)//2])
-    # plt.title("FFT of Noisy Signal")
-    # plt.xlabel("Frequency [Hz]")
-    # plt.ylabel("Amplitude")
-    # plt.show()
-
-    cutoff = 1  # TODO
+    cutoff = .5  # TODO
     fft_signal_filtered = np.where(np.abs(frequencies) > cutoff, 0, fft_signal)
 
     filtered_signal = ifft(fft_signal_filtered)
-
-    # plt.figure()
-    # plt.plot(time, np.real(filtered_signal), label="Filtered Signal")
-
-    # plt.title("Filtered UR5e tool velocity estimation (gelsight)", fontsize=15)
-    # plt.xlabel("time [s]", fontsize=15)
-    # plt.ylabel("linear_velocity [m/s^2]", fontsize=15)
-    # plt.legend()
-    # plt.show(block=False)
-
 
     plt.subplot(2, 1, 1)
     plt.plot(time, vel, label="vel")
     plt.xlabel("time [s]", fontsize=15)
     plt.ylabel("velocity from images [m/s^2]", fontsize=15)
-
-    #plot 2:
-    # x = np.array([0, 1, 2, 3])
-    # y = np.array([10, 20, 30, 40])
 
     plt.subplot(2, 1, 2)
     plt.plot(time, np.real(filtered_signal), label="Filtered Signal")
@@ -254,13 +200,67 @@ def plot_img_velocity_estimation(csv_file_name):
     plt.show()
 
 
+def plot_various_data():
+    
+    df_fabric = pd.read_csv(config["plotter"]["fabric_data"])
+    df_time_synch_fabric = pd.read_csv(config["plotter"]["time_synched_fabric_data"])
+    df_est_vel = pd.read_csv(config["plotter"]["img_velocity_estimation"])
+
+    header_fabric = df_fabric.columns.tolist()
+    time_fabric = np.array(df_fabric[header_fabric[0]])
+    voltage_fabric = np.array(df_fabric[header_fabric[1]])  # voltages (mV)
+
+    header_time_synch_fabric = df_time_synch_fabric.columns.tolist()
+    time_synch_fabric_time = np.array(df_time_synch_fabric[header_time_synch_fabric[0]])
+    time_synch_fabric_voltage = np.array(df_time_synch_fabric[header_time_synch_fabric[1]])
+
+    header_est_vel = df_est_vel.columns.tolist()
+    time_est_vel = np.array(df_est_vel[header_est_vel[0]])[1:]
+    est_vel = np.array(df_est_vel[header_est_vel[1]])[1:]  # discarding the first element (inf)
+    
+
+    # Perform FFT
+    fft_est_vel = fft(est_vel)
+    est_vel_frequencies = np.fft.fftfreq(len(time_est_vel), time_est_vel[1] - time_est_vel[0])
+    cutoff = 1  # TODO
+    fft_signal_filtered = np.where(np.abs(est_vel_frequencies) > cutoff, 0, fft_est_vel)
+    filtered_est_vel = ifft(fft_signal_filtered)
+
+    plt.figure()
+
+    plt.subplot(4, 1, 1)
+    plt.plot(time_fabric, voltage_fabric,'r-*')
+    # plt.xlabel("time [s]", fontsize=10)
+    plt.ylabel("voltage [v]", fontsize=8)
+
+    plt.subplot(4, 1, 2)
+    plt.plot(time_synch_fabric_time, time_synch_fabric_voltage,'r-*')
+    # plt.xlabel("time [s]", fontsize=10)
+    plt.ylabel("synched voltage [v]", fontsize=8)
+
+    plt.subplot(4, 1, 3)
+    plt.plot(time_est_vel, est_vel,'r-*')
+    # plt.xlabel("time [s]", fontsize=10)
+    plt.ylabel("estimated velocity (gelsight) [m/s^2]", fontsize=8)
+
+    plt.subplot(4, 1, 4)
+    plt.plot(time_est_vel, np.real(filtered_est_vel),'r-*')
+    plt.xlabel("time [s]", fontsize=8)
+    plt.ylabel("filtered estimated velocity [m/s^2]", fontsize=8)
+
+    # plt.tight_layout()
+    plt.subplots_adjust(hspace=0.3)  # Increase the vertical spacing
+    plt.show()
+
+
+
+
 if __name__ == "__main__":
 
     ## uncomment which function you want to plot.
-    # plot_FT(config["plotter"]["test_realsetup_ft_data_csv"])
-    # plot_xdf_fabric_sensor(config["plotter"]["fabric_gelsight_xdf"])
-    # plot_csv_fabric_sensor(config["plotter"]["sensor_log_csv"])
-    plot_ur5e_tool_lin_velocity(config["plotter"]["ur5e_tool_lin_vel_csv"])
-    plot_img_velocity_estimation(config["plotter"]["img_velocity_estimation"])
+    # plot_ur5e_tool_lin_velocity(config["plotter"]["ur5e_tool_lin_vel_csv"])
+    # plot_csv_fabric_sensor(config["plotter"]["fabric_data"])
+    # plot_img_velocity_estimation(config["plotter"]["img_velocity_estimation"])
+    plot_various_data()
     
     plt.show()  # simultaneaus plotting
