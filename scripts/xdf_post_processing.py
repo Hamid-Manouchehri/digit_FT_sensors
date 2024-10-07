@@ -112,7 +112,7 @@ def save_img_time_stamps(img_time_stamps, file_path):
         index = index + 1
 
 
-def save_xdf_voltages(voltage_time_stamp, voltage_data, file_path):
+def save_xdf_fabric_sensor(voltage_time_stamp, voltage_data, file_path):
 
     fieldnames = ['time', 'voltage']
     setup_csv(file_path, fieldnames)
@@ -128,6 +128,132 @@ def save_xdf_voltages(voltage_time_stamp, voltage_data, file_path):
         save_to_csv(file_path, row)
 
 
+def save_xdf_ur5e_joint_states(ur5e_joint_states_time_stamp, ur5e_joint_states, file_path):
+
+    fieldnames = ['time', 'shoulder_pan_pos', 'shoulder_lift_pos', 'elbow_pos', 'wrist1_pos', 'wrist2_pos', 'wrist3_pos',
+                  'shoulder_pan_vel', 'shoulder_lift_vel', 'elbow_vel', 'wrist1_vel', 'wrist2_vel', 'wrist3_vel',
+                  'shoulder_pan_curr', 'shoulder_lift_curr', 'elbow_curr', 'wrist1_curr', 'wrist2_curr', 'wrist3_curr']
+    setup_csv(file_path, fieldnames)
+
+    for i in range(len(ur5e_joint_states_time_stamp)):
+
+        data = {
+            fieldnames[0]: ur5e_joint_states_time_stamp[i],
+            fieldnames[1]: ur5e_joint_states[i][0],
+            fieldnames[2]: ur5e_joint_states[i][1],
+            fieldnames[3]: ur5e_joint_states[i][2],
+            fieldnames[4]: ur5e_joint_states[i][3],
+            fieldnames[5]: ur5e_joint_states[i][4],
+            fieldnames[6]: ur5e_joint_states[i][5],
+
+            fieldnames[7]: ur5e_joint_states[i][6],
+            fieldnames[8]: ur5e_joint_states[i][7],
+            fieldnames[9]: ur5e_joint_states[i][8],
+            fieldnames[10]: ur5e_joint_states[i][9],
+            fieldnames[11]: ur5e_joint_states[i][10],
+            fieldnames[12]: ur5e_joint_states[i][11],
+
+            fieldnames[13]: ur5e_joint_states[i][12],
+            fieldnames[14]: ur5e_joint_states[i][13],
+            fieldnames[15]: ur5e_joint_states[i][14],
+            fieldnames[16]: ur5e_joint_states[i][15],
+            fieldnames[17]: ur5e_joint_states[i][16],
+            fieldnames[18]: ur5e_joint_states[i][17]
+        }
+
+        row = [data[fieldnames[0]]] + \
+              [data[fieldnames[1]]] + [data[fieldnames[2]]] + [data[fieldnames[3]]] + \
+              [data[fieldnames[4]]] + [data[fieldnames[5]]] + [data[fieldnames[6]]] + \
+              [data[fieldnames[7]]] + [data[fieldnames[8]]] + [data[fieldnames[9]]] + \
+              [data[fieldnames[10]]] + [data[fieldnames[11]]] + [data[fieldnames[12]]] + \
+              [data[fieldnames[13]]] + [data[fieldnames[14]]] + [data[fieldnames[15]]] + \
+              [data[fieldnames[16]]] + [data[fieldnames[17]]] + [data[fieldnames[18]]]
+
+
+        save_to_csv(file_path, row)
+
+
+def save_xdf_ur5e_wrench(ur5e_wrench_time_stamp, ur5e_wrench, file_path):
+
+    fieldnames = ['time', 'Fx', 'Fy', 'Fz', 'Tx', 'Ty', 'Tz']
+    setup_csv(file_path, fieldnames)
+
+    for i in range(len(ur5e_wrench_time_stamp)):
+
+        data = {
+            fieldnames[0]: ur5e_wrench_time_stamp[i],
+            fieldnames[1]: ur5e_wrench[i][0],
+            fieldnames[2]: ur5e_wrench[i][1],
+            fieldnames[3]: ur5e_wrench[i][2],
+
+            fieldnames[4]: ur5e_wrench[i][3],
+            fieldnames[5]: ur5e_wrench[i][4],
+            fieldnames[6]: ur5e_wrench[i][5]
+        }
+
+        row = [data[fieldnames[0]]] + \
+              [data[fieldnames[1]]] + [data[fieldnames[2]]] + [data[fieldnames[3]]] + \
+              [data[fieldnames[4]]] + [data[fieldnames[5]]] + [data[fieldnames[6]]]
+
+
+        save_to_csv(file_path, row)
+
+
+def save_xdf_ur5e_tool_coordinate(ur5e_tool_coordinate_time_stamp, ur5e_tool_coordinate, file_path):
+
+    fieldnames = ['time', 'trans_x', 'trans_y', 'trans_z', 'rot_x', 'rot_y', 'rot_z', 'rot_w']
+    setup_csv(file_path, fieldnames)
+
+    for i in range(len(ur5e_tool_coordinate_time_stamp)):
+
+        data = {
+            fieldnames[0]: ur5e_tool_coordinate_time_stamp[i],
+            fieldnames[1]: ur5e_tool_coordinate[i][0],
+            fieldnames[2]: ur5e_tool_coordinate[i][1],
+            fieldnames[3]: ur5e_tool_coordinate[i][2],
+
+            fieldnames[4]: ur5e_tool_coordinate[i][3],
+            fieldnames[5]: ur5e_tool_coordinate[i][4],
+            fieldnames[6]: ur5e_tool_coordinate[i][5],
+            fieldnames[7]: ur5e_tool_coordinate[i][6]
+        }
+
+        row = [data[fieldnames[0]]] + \
+              [data[fieldnames[1]]] + [data[fieldnames[2]]] + [data[fieldnames[3]]] + \
+              [data[fieldnames[4]]] + [data[fieldnames[5]]] + [data[fieldnames[6]]] + \
+              [data[fieldnames[7]]]
+
+
+        save_to_csv(file_path, row)
+
+
+def save_xdf_ur5e_tool_velocity(ur5e_tool_velocity_time_stamp, ur5e_tool_velocity, file_path):
+
+    fieldnames = ['time', 'tool_vel_x', 'tool_vel_y', 'tool_vel_z', 'tool_ang_vel_x', 'tool_ang_vel_y', 'tool_ang_vel_z']
+    setup_csv(file_path, fieldnames)
+
+    for i in range(len(ur5e_tool_velocity_time_stamp)):
+
+        data = {
+            fieldnames[0]: ur5e_tool_velocity_time_stamp[i],
+            fieldnames[1]: ur5e_tool_velocity[i][0],
+            fieldnames[2]: ur5e_tool_velocity[i][1],
+            fieldnames[3]: ur5e_tool_velocity[i][2],
+
+            fieldnames[4]: ur5e_tool_velocity[i][3],
+            fieldnames[5]: ur5e_tool_velocity[i][4],
+            fieldnames[6]: ur5e_tool_velocity[i][5]
+        }
+
+        row = [data[fieldnames[0]]] + \
+              [data[fieldnames[1]]] + [data[fieldnames[2]]] + [data[fieldnames[3]]] + \
+              [data[fieldnames[4]]] + [data[fieldnames[5]]] + [data[fieldnames[6]]]
+
+
+        save_to_csv(file_path, row)
+
+
+        
 if __name__ == '__main__':
 
     streams, header = pyxdf.load_xdf(config["xdf_post_processing"]["fabric_gelsight_xdf"])
@@ -135,28 +261,38 @@ if __name__ == '__main__':
     for stream in streams:
         if stream["info"]["name"][0] == 'GelSightMini':
             raw_xdf_images = stream["time_series"]
-            images_time_stamps =  stream["time_stamps"]
+            images_time_stamps =  stream["time_stamps"]  # time
 
         if stream["info"]["name"][0] == 'Sensor_mV':
             raw_xdf_voltages = stream["time_series"]
             raw_xdf_voltages = [float(item[0].strip('[]')) for item in raw_xdf_voltages]
-            voltages_time_stamps =  stream["time_stamps"]
+            voltages_time_stamps =  stream["time_stamps"]  # time
+
+        if stream["info"]["name"][0] == 'ur5e_joint_states':
+            raw_xdf_ur5e_joint_states = stream["time_series"]
+            ur5e_joint_states_time_stamps =  stream["time_stamps"]  # time
+
+        if stream["info"]["name"][0] == 'ur5e_wrench':
+            raw_xdf_ur5e_wrench = stream["time_series"]
+            ur5e_wrench_time_stamps =  stream["time_stamps"]  # time
+
+        if stream["info"]["name"][0] == 'ur5e_tool_coordinate':
+            raw_xdf_ur5e_tool_coordinate = stream["time_series"]
+            ur5e_tool_coordinate_time_stamps =  stream["time_stamps"]  # time
+
+        if stream["info"]["name"][0] == 'ur5e_tool_velocity':
+            raw_xdf_ur5e_tool_velocity = stream["time_series"]
+            ur5e_tool_velocity_time_stamps =  stream["time_stamps"]  # time
+
+
 
     # save_img_time_stamps(images_time_stamps, config["xdf_post_processing"]["img_frame_times"])
-    # save_xdf_images(raw_xdf_images, config["xdf_post_processing"]["img_data"], "fabric_gelsight_new_v0")
+    # save_xdf_images(raw_xdf_images, config["xdf_post_processing"]["img_data"], folder_name="fabric_gelsight_test_2")
 
-    # save_xdf_voltages(voltages_time_stamps, raw_xdf_voltages, config["xdf_post_processing"]["fabric_data"])
+    # save_xdf_fabric_sensor(voltages_time_stamps, raw_xdf_voltages, config["xdf_post_processing"]["fabric_data"])
 
+    # save_xdf_ur5e_joint_states(ur5e_joint_states_time_stamps, raw_xdf_ur5e_joint_states, config["xdf_post_processing"]["ur5e_joint_states"])
+    # save_xdf_ur5e_wrench(ur5e_wrench_time_stamps, raw_xdf_ur5e_wrench, config["xdf_post_processing"]["ur5e_wrench"])
 
-
-    ## time synchronization:
-    if len(images_time_stamps) <= len(voltages_time_stamps):
-        ## Interpolating voltage data to image time points
-        interpolated_voltage_data = np.interp(images_time_stamps, voltages_time_stamps, raw_xdf_voltages)
-        sync_time = images_time_stamps
-        # save_img_time_stamps(config["xdf_post_processing"]["sync_gelsight_fabric_time"], voltages_time_stamps)
-
-    else:
-        ## Interpolating image data to voltage time points
-        interpolated_gelsight_data = np.interp(voltages_time_stamps, images_time_stamps, raw_xdf_images)
-        sync_time = voltages_time_stamps
+    # save_xdf_ur5e_tool_coordinate(ur5e_tool_coordinate_time_stamps, raw_xdf_ur5e_tool_coordinate, config["xdf_post_processing"]["ur5e_tool_coordinate"])
+    # save_xdf_ur5e_tool_velocity(ur5e_tool_velocity_time_stamps, raw_xdf_ur5e_tool_velocity, config["xdf_post_processing"]["ur5e_tool_velocity"])

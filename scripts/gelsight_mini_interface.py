@@ -204,14 +204,14 @@ if __name__ == '__main__':
 
     gelsight_mini_obj.show_image()
 
-    while True:
-        f1 = gelsight_mini_obj.sensor.get_image()
+    # while True:
+    #     f1 = gelsight_mini_obj.sensor.get_image()
         # start = time.time()
         # gelsight_mini_obj.do_cv_stuff(f1)
         # end = time.time()
         # print(end - start)
 
-    gelsight_mini_obj.save_png_image(config["gelsight_mini_interface"]["img_data_dir"], 'test_img.png')
+    # gelsight_mini_obj.save_png_image(config["gelsight_mini_interface"]["img_data_dir"], 'test_img.png')
 
-    gelsight_mini_obj.save_img_in_hdf5()
-    gelsight_mini_obj.save_hdf5_as_png()
+    # gelsight_mini_obj.save_img_in_hdf5()
+    # gelsight_mini_obj.save_hdf5_as_png()

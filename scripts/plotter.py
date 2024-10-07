@@ -143,22 +143,17 @@ def plot_ur5e_tool_lin_velocity(csv_file_name):
     df = pd.read_csv(csv_file_name)
     header = df.columns.tolist()
     time = np.array(df[header[0]])
-    vel_x = np.array(df[header[1]])
-    vel_y = np.array(df[header[2]])
-    vel_z = np.array(df[header[3]])
+    lin_vel_x = np.array(df[header[1]])
+    lin_vel_y = np.array(df[header[2]])
+    lin_vel_z = np.array(df[header[3]])
 
-    min_value = min(time)
-    time_shifted_to_zero = [num - min_value for num in time]
+    ang_vel_x = np.array(df[header[4]])
+    ang_vel_y = np.array(df[header[5]])
+    ang_vel_z = np.array(df[header[6]])
 
-    # plt.figure()
-    # plt.plot(frequencies[:len(frequencies)//2], np.abs(fft_signal)[:len(frequencies)//2])
-    # plt.title("FFT of Noisy Signal")
-    # plt.xlabel("Frequency [Hz]")
-    # plt.ylabel("Amplitude")
-    # plt.sho
-    plt.plot(time, vel_x, label="vel_x")
-    plt.plot(time, vel_y, label="vel_y")
-    plt.plot(time, vel_z, label="vel_z")
+    plt.plot(time, lin_vel_x, label="lin_vel_x")
+    plt.plot(time, lin_vel_y, label="lin_vel_y")
+    plt.plot(time, lin_vel_z, label="lin_vel_z")
 
     plt.title("UR5e actual tool velocity", fontsize=15)
     plt.xlabel("time [s]", fontsize=15)
@@ -200,25 +195,56 @@ def plot_img_velocity_estimation(csv_file_name):
     plt.show()
 
 
+def plot_csv_ur5e_wrench(csv_file_name):
+
+    df = pd.read_csv(csv_file_name)
+    header = df.columns.tolist()
+    time = np.array(df[header[0]])
+    F_x = np.array(df[header[1]])
+    F_y = np.array(df[header[2]])
+    F_z = np.array(df[header[3]])
+
+    T_x = np.array(df[header[4]])
+    T_y = np.array(df[header[5]])
+    T_z = np.array(df[header[6]])
+
+    plt.plot(time, F_x, label="Force_x")
+    plt.plot(time, F_y, label="Force_y")
+    plt.plot(time, F_z, label="Force_z")
+
+    plt.title("UR5e wrench (tools' FT)", fontsize=15)
+    plt.xlabel("time [s]", fontsize=15)
+    plt.ylabel("Force [N]", fontsize=15)
+    plt.legend()
+    plt.show(block=False)
+
+
+
 def plot_various_data():
     
-    df_fabric = pd.read_csv(config["plotter"]["fabric_data"])
-    df_time_synch_fabric = pd.read_csv(config["plotter"]["time_synched_fabric_data"])
     df_est_vel = pd.read_csv(config["plotter"]["img_velocity_estimation"])
-
-    header_fabric = df_fabric.columns.tolist()
-    time_fabric = np.array(df_fabric[header_fabric[0]])
-    voltage_fabric = np.array(df_fabric[header_fabric[1]])  # voltages (mV)
+    # df_fabric = pd.read_csv(config["plotter"]["fabric_data"])
+    df_time_synch_fabric = pd.read_csv(config["plotter"]["time_synched_fabric_data"])
+    df_time_synched_ur5e_tool_velocity = pd.read_csv(config["plotter"]["time_synched_ur5e_tool_velocity"])
+    df_time_synched_ur5e_wrench = pd.read_csv(config["plotter"]["time_synched_ur5e_wrench"])
+    
+    header_est_vel = df_est_vel.columns.tolist()
+    time_est_vel = np.array(df_est_vel[header_est_vel[0]])[1:]
+    est_vel = np.array(df_est_vel[header_est_vel[1]])[1:]  # discarding the first element (inf)
 
     header_time_synch_fabric = df_time_synch_fabric.columns.tolist()
     time_synch_fabric_time = np.array(df_time_synch_fabric[header_time_synch_fabric[0]])
     time_synch_fabric_voltage = np.array(df_time_synch_fabric[header_time_synch_fabric[1]])
 
-    header_est_vel = df_est_vel.columns.tolist()
-    time_est_vel = np.array(df_est_vel[header_est_vel[0]])[1:]
-    est_vel = np.array(df_est_vel[header_est_vel[1]])[1:]  # discarding the first element (inf)
-    
+    header_time_synch_ur5e_tool_velocity = df_time_synched_ur5e_tool_velocity.columns.tolist()
+    time_synch_ur5e_tool_velocity_time = np.array(df_time_synched_ur5e_tool_velocity[header_time_synch_ur5e_tool_velocity[0]])
+    time_synch_ur5e_tool_velocity = np.array(df_time_synched_ur5e_tool_velocity[header_time_synch_ur5e_tool_velocity[1]])
 
+    header_time_synch_ur5e_wrench = df_time_synched_ur5e_wrench.columns.tolist()
+    time_synch_ur5e_wrench_time = np.array(df_time_synched_ur5e_wrench[header_time_synch_ur5e_wrench[0]])
+    time_synch_ur5e_wrench = np.array(df_time_synched_ur5e_wrench[header_time_synch_ur5e_wrench[1]])
+
+    
     # Perform FFT
     fft_est_vel = fft(est_vel)
     est_vel_frequencies = np.fft.fftfreq(len(time_est_vel), time_est_vel[1] - time_est_vel[0])
@@ -229,24 +255,25 @@ def plot_various_data():
     plt.figure()
 
     plt.subplot(4, 1, 1)
-    plt.plot(time_fabric, voltage_fabric,'r-*')
-    # plt.xlabel("time [s]", fontsize=10)
-    plt.ylabel("voltage [v]", fontsize=8)
+    plt.plot(time_synch_ur5e_wrench_time, time_synch_ur5e_wrench,'b-.')
+    plt.ylabel("ur5e tool force [N]", fontsize=8)
 
     plt.subplot(4, 1, 2)
-    plt.plot(time_synch_fabric_time, time_synch_fabric_voltage,'r-*')
-    # plt.xlabel("time [s]", fontsize=10)
-    plt.ylabel("synched voltage [v]", fontsize=8)
+    plt.plot(time_synch_ur5e_tool_velocity_time, time_synch_ur5e_tool_velocity,'b-.')
+    plt.ylabel("ur5e tool linear vel [m/s^2]", fontsize=8)
 
     plt.subplot(4, 1, 3)
-    plt.plot(time_est_vel, est_vel,'r-*')
-    # plt.xlabel("time [s]", fontsize=10)
-    plt.ylabel("estimated velocity (gelsight) [m/s^2]", fontsize=8)
+    plt.plot(time_synch_fabric_time, time_synch_fabric_voltage,'b-.')
+    plt.ylabel("synched voltage [v]", fontsize=8)
 
     plt.subplot(4, 1, 4)
-    plt.plot(time_est_vel, np.real(filtered_est_vel),'r-*')
-    plt.xlabel("time [s]", fontsize=8)
-    plt.ylabel("filtered estimated velocity [m/s^2]", fontsize=8)
+    plt.plot(time_est_vel, est_vel,'b-.')
+    plt.ylabel("estimated velocity (gelsight) [m/s^2]", fontsize=8)
+
+    # plt.subplot(4, 1, 5)
+    # plt.plot(time_est_vel, np.real(filtered_est_vel),'b-.')
+    # plt.xlabel("time [s]", fontsize=8)
+    # plt.ylabel("filtered estimated velocity [m/s^2]", fontsize=8)
 
     # plt.tight_layout()
     plt.subplots_adjust(hspace=0.3)  # Increase the vertical spacing
@@ -258,9 +285,11 @@ def plot_various_data():
 if __name__ == "__main__":
 
     ## uncomment which function you want to plot.
-    # plot_ur5e_tool_lin_velocity(config["plotter"]["ur5e_tool_lin_vel_csv"])
     # plot_csv_fabric_sensor(config["plotter"]["fabric_data"])
     # plot_img_velocity_estimation(config["plotter"]["img_velocity_estimation"])
+    # plot_csv_ur5e_wrench(config["plotter"]["ur5e_wrench"])
+    # plot_ur5e_tool_lin_velocity(config["plotter"]["ur5e_tool_velocity"])
+
     plot_various_data()
     
     plt.show()  # simultaneaus plotting

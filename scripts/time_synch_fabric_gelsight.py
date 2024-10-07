@@ -27,7 +27,6 @@
  ****************************************************************************** '''
 #!/usr/bin/env python3
 
-import cv2
 import numpy as np
 import cv2
 import yaml
@@ -42,59 +41,81 @@ dir_to_config = join(parent_dir_abs, 'config', 'config.yml')
 with open(dir_to_config, 'r') as file:
     config = yaml.load(file, Loader=yaml.SafeLoader)
 
-
-
 if __name__ == '__main__':
 
     estimated_vel = config["time_synch_fabric_gelsight"]["img_velocity_estimation"]
+
     fabric_data = config["time_synch_fabric_gelsight"]["fabric_data"]
+    ur5e_tool_velocity = config["time_synch_fabric_gelsight"]["ur5e_tool_velocity"]
+    ur5e_wrench = config["time_synch_fabric_gelsight"]["ur5e_wrench"]
 
     df_est_vel = pd.read_csv(estimated_vel)
     est_vel_header = df_est_vel.columns.tolist()
     est_vel_time = np.array(df_est_vel[est_vel_header[0]])
     est_vel = np.array(df_est_vel[est_vel_header[1]])
 
+    time_synched_fabric_fieldnames = ['time', 'voltage']  # TODO
     df_fabric_data = pd.read_csv(fabric_data)
     fabric_header = df_fabric_data.columns.tolist()
     fabric_time = np.array(df_fabric_data[fabric_header[0]])
     fabric_voltage = np.array(df_fabric_data[fabric_header[1]])
+
+    time_synched_ur5e_tool_velocity_fieldnames = ['time', 'tool_vel_y']  # TODO
+    df_ur5e_tool_velocity = pd.read_csv(ur5e_tool_velocity)
+    ur5e_tool_velocity_header = df_ur5e_tool_velocity.columns.tolist()
+    ur5e_tool_velocity_time = np.array(df_ur5e_tool_velocity[ur5e_tool_velocity_header[0]])
+    ur5e_tool_velocity = np.array(df_ur5e_tool_velocity[ur5e_tool_velocity_header[2]])  # tool_vel_y
+
+    time_synched_ur5e_wrench_fieldnames = ['time', 'Fy']  # TODO
+    df_ur5e_wrench = pd.read_csv(ur5e_wrench)
+    ur5e_wrench_header = df_ur5e_wrench.columns.tolist()
+    ur5e_wrench_time = np.array(df_ur5e_wrench[ur5e_wrench_header[0]])
+    ur5e_wrench = np.array(df_ur5e_wrench[ur5e_wrench_header[2]])  # Fy
     
-    time_synched_fabric_fieldnames = ['time', 'voltage']  # TODO
-    setup_csv(config["time_synch_fabric_gelsight"]["time_synched_fabric_data"], time_synched_fabric_fieldnames)
-    
-    # print("time", est_vel_time[1], " estimated_vel: ", est_vel[1])
 
     init_index_fabric = np.where(np.abs(fabric_time - est_vel_time[0]) == np.abs(fabric_time - est_vel_time[0]).min())
-    closest_init_fabric_time = fabric_time[init_index_fabric][0]
     final_index_fabric = np.where(np.abs(fabric_time - est_vel_time[-1]) == np.abs(fabric_time - est_vel_time[-1]).min())
-    closest_final_fabric_time = fabric_time[final_index_fabric][0]
 
-    # for vel_time in est_vel_time:
+    init_index_ur5e_tool_velocity = np.where(np.abs(ur5e_tool_velocity_time - est_vel_time[0]) == np.abs(ur5e_tool_velocity_time - est_vel_time[0]).min())
+    final_index_ur5e_tool_velocity = np.where(np.abs(ur5e_tool_velocity_time - est_vel_time[-1]) == np.abs(ur5e_tool_velocity_time - est_vel_time[-1]).min())
 
-    #     index = np.where(np.abs(fabric_time - vel_time) == np.abs(fabric_time - vel_time).min())
-    #     closest_fabric_time = fabric_time[index][0]
-    #     closest_fabric_voltage = fabric_voltage[index][0]
-    #     print(" index: ", index[0][0], ", value: ", closest_fabric_time)
+    init_index_ur5e_wrench = np.where(np.abs(ur5e_wrench_time - est_vel_time[0]) == np.abs(ur5e_wrench_time - est_vel_time[0]).min())
+    final_index_ur5e_wrench = np.where(np.abs(ur5e_wrench_time - est_vel_time[-1]) == np.abs(ur5e_wrench_time - est_vel_time[-1]).min())
+
+
+    # setup_csv(config["time_synch_fabric_gelsight"]["time_synched_fabric_data"], time_synched_fabric_fieldnames)
+    # for i in range(init_index_fabric[0][0], final_index_fabric[0][0]):
 
     #     data = {
-    #         time_synched_fabric_fieldnames[0]: closest_fabric_time,
-    #         time_synched_fabric_fieldnames[1]: closest_fabric_voltage
+    #         time_synched_fabric_fieldnames[0]: fabric_time[i],
+    #         time_synched_fabric_fieldnames[1]: fabric_voltage[i]
     #     }
 
     #     row = [data[time_synched_fabric_fieldnames[0]]] + [data[time_synched_fabric_fieldnames[1]]]
     #     save_to_csv(config["time_synch_fabric_gelsight"]["time_synched_fabric_data"], row)
 
 
-    for i in range(init_index_fabric[0][0], final_index_fabric[0][0]):
+    # setup_csv(config["time_synch_fabric_gelsight"]["time_synched_ur5e_tool_velocity"], time_synched_ur5e_tool_velocity_fieldnames)
+    # for i in range(init_index_ur5e_tool_velocity[0][0], final_index_ur5e_tool_velocity[0][0]):
 
-        data = {
-            time_synched_fabric_fieldnames[0]: fabric_time[i],
-            time_synched_fabric_fieldnames[1]: fabric_voltage[i]
-        }
+    #     data = {
+    #         time_synched_ur5e_tool_velocity_fieldnames[0]: ur5e_tool_velocity_time[i],
+    #         time_synched_ur5e_tool_velocity_fieldnames[1]: ur5e_tool_velocity[i]
+    #     }
 
-        row = [data[time_synched_fabric_fieldnames[0]]] + [data[time_synched_fabric_fieldnames[1]]]
-        save_to_csv(config["time_synch_fabric_gelsight"]["time_synched_fabric_data"], row)
+    #     row = [data[time_synched_ur5e_tool_velocity_fieldnames[0]]] + [data[time_synched_ur5e_tool_velocity_fieldnames[1]]]
+    #     save_to_csv(config["time_synch_fabric_gelsight"]["time_synched_ur5e_tool_velocity"], row)
 
-        
+
+    # setup_csv(config["time_synch_fabric_gelsight"]["time_synched_ur5e_wrench"], time_synched_ur5e_wrench_fieldnames)
+    # for i in range(init_index_ur5e_wrench[0][0], final_index_ur5e_wrench[0][0]):
+
+    #     data = {
+    #         time_synched_ur5e_wrench_fieldnames[0]: ur5e_wrench_time[i],
+    #         time_synched_ur5e_wrench_fieldnames[1]: ur5e_wrench[i]
+    #     }
+
+    #     row = [data[time_synched_ur5e_wrench_fieldnames[0]]] + [data[time_synched_ur5e_wrench_fieldnames[1]]]
+    #     save_to_csv(config["time_synch_fabric_gelsight"]["time_synched_ur5e_wrench"], row)
 
 

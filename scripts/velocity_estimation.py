@@ -91,7 +91,7 @@ def do_cv_stuff(img1_path):
     velocity_estimation_fieldnames = ['time', 'vel']  # TODO
     setup_csv(config["velocity_estimation"]["img_velocity_estimation"], velocity_estimation_fieldnames)
     
-    for i in range(280, 640):
+    for i in range(285, 830):
 
         img = img1_path + str(i) + ".jpg"
 
@@ -107,7 +107,7 @@ def do_cv_stuff(img1_path):
         img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
 
         # Apply adaptive thresholding
-        img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 81, 8)
+        img3 = cv2.adaptiveThreshold(img2, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 51, 4)
         # cv2.imshow('Processed Image', img3)
         # cv2.waitKey(0)
         
